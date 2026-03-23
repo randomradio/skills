@@ -1,0 +1,4 @@
+interface:
+  display_name: "Long Horizon Planner"
+  short_description: "Plan and steer long-running Codex work."
+  default_prompt: "Use $long-horizon-planner to create and maintain a long-horizon execution plan for this task."

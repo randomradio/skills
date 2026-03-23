@@ -19,11 +19,36 @@ This repo is a small workspace wrapper around the actual `gstack` project, which
 
 Custom local skills in this repo:
 - [`quick-shoutout/`](quick-shoutout/) — deployment scaffold/publish helper skill (ported from `latentvibe-publish` and invokable as `quick-shoutout`).
+- [`long-horizon-planner/`](long-horizon-planner/) — planning skill for long-running tasks using durable control files (`Prompt.md`, `Plans.md`, `Implement.md`, `Documentation.md`).
 
 Install `quick-shoutout` into your Codex skills directory:
 
 ```bash
 cd quick-shoutout && ./scripts/install_skill.sh --target-dir "$HOME/.codex/skills" --force
+```
+
+Install `long-horizon-planner` into your Codex skills directory:
+
+```bash
+cd long-horizon-planner && ./scripts/install_skill.sh --target-dir "$HOME/.codex/skills" --force
+```
+
+Scaffold long-horizon planning docs in a repo (default output: `docs/long-horizon/`):
+
+```bash
+~/.codex/skills/long-horizon-planner/scripts/init_long_horizon_workspace.sh --root .
+```
+
+Generated files:
+- `docs/long-horizon/Prompt.md`
+- `docs/long-horizon/Plans.md`
+- `docs/long-horizon/Implement.md`
+- `docs/long-horizon/Documentation.md`
+
+Custom output directory example:
+
+```bash
+~/.codex/skills/long-horizon-planner/scripts/init_long_horizon_workspace.sh --root . --dir docs/agent-control
 ```
 
 ## Repo map
