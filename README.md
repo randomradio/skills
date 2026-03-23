@@ -17,6 +17,15 @@ This workspace contains the `gstack/` project locally, but the install flow abov
 
 This repo is a small workspace wrapper around the actual `gstack` project, which lives in [`gstack/`](gstack/). If you landed on the repo root and want to understand the project quickly, use the links below instead of treating the root as a second copy of the product docs.
 
+Custom local skills in this repo:
+- [`quick-shoutout/`](quick-shoutout/) — deployment scaffold/publish helper skill (ported from `latentvibe-publish` and invokable as `quick-shoutout`).
+
+Install `quick-shoutout` into your Codex skills directory:
+
+```bash
+cd quick-shoutout && ./scripts/install_skill.sh --target-dir "$HOME/.codex/skills" --force
+```
+
 ## Repo map
 
 - [`gstack/README.md#quick-start-your-first-10-minutes`](gstack/README.md#quick-start-your-first-10-minutes) — what gstack is, who it is for, and the fastest path to a first useful run.
