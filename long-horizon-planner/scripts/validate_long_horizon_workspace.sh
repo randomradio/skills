@@ -56,6 +56,14 @@ check_heading() {
   grep -Eq "$pattern" "$path" || fail "Missing expected section in $path: $pattern"
 }
 
+check_optional_heading() {
+  local path="$1"
+  local pattern="$2"
+  if grep -Eq "$pattern" "$path"; then
+    echo "[OK] Optional section present in $path: $pattern"
+  fi
+}
+
 PROMPT="$TARGET_DIR/Prompt.md"
 PLANS="$TARGET_DIR/Plans.md"
 IMPLEMENT="$TARGET_DIR/Implement.md"
@@ -73,5 +81,7 @@ check_heading "$PLANS" '^## Risk Register$'
 check_heading "$IMPLEMENT" '^## Iteration Loop$'
 check_heading "$DOCS" '^## Local Setup$'
 check_heading "$DOCS" '^## Verification Commands$'
+check_optional_heading "$PLANS" '^## Loop Status$'
+check_optional_heading "$DOCS" '^## Runtime Execution Notes$'
 
 echo "[OK] Long-horizon planning workspace validated: $TARGET_DIR"

@@ -32,3 +32,5 @@ Use four files as operational control points:
 ## Comparison note
 
 This approach overlaps with objective-first loop systems (for example Ralph-style loops), but this skill focuses on planning and operating contract files first so long-running implementation remains readable, resumable, and auditable.
+
+In v0.1, this skill adds a runnable objective-first loop (`scripts/run_long_horizon_loop.sh`) while preserving the four planner files as the control plane.

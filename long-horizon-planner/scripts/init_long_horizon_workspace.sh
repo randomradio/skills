@@ -177,6 +177,18 @@ Status:
 ## Decision Log
 - $TODAY: [Decision], reason: [Reason]
 
+## Loop Status
+- Run ID:
+- Last updated:
+- Iteration:
+- Status:
+- Work status:
+- Review decision:
+- Validation:
+- Progress gate:
+- Next step:
+- Stop reason:
+
 ## Next Milestone
 - [Current milestone owner + next action]
 EOF_PLANS
@@ -246,6 +258,15 @@ Last updated: $TODAY
 - Milestone 01:
 - Milestone 02:
 - Milestone 03:
+
+## Runtime Execution Notes
+- Last updated:
+- Iteration:
+- Reviewer outcome:
+- Reviewer assessment:
+- Optional verification status:
+- Validation summary:
+- Stop reason:
 
 ## Troubleshooting
 - Issue: [symptom]

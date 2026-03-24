@@ -1,39 +1,52 @@
 ---
 name: long-horizon-planner
-description: Plan and steer long-running coding tasks by creating and maintaining durable markdown control files (Prompt.md, Plans.md, Implement.md, Documentation.md). Use when work will span many milestones, take hours or days, require checkpointing, or needs resumable execution without losing context.
+description: Plan and steer long-running coding tasks with durable control docs, then execute an objective-first work/review loop with resumable runtime state when needed.
 ---
 
 # Long Horizon Planner
 
 ## Overview
 
-Use file-based planning to extend execution horizon and keep work coherent across long runs.
-Treat `Prompt.md`, `Plans.md`, `Implement.md`, and `Documentation.md` as the source of truth for intent, plan, operating contract, and user-facing docs.
+Use this as a hybrid long-horizon system:
+- control plane: `Prompt.md`, `Plans.md`, `Implement.md`, `Documentation.md`
+- execution plane: objective-first loop runner in `.codex/long-horizon-loop/`
+
+The planning docs remain source of truth; loop artifacts provide reliable execution telemetry and resume support.
 
 ## Quick Start
 
-Initialize a planning workspace in the current repo:
+Initialize planning docs in a repo:
 
 ```bash
 ./scripts/init_long_horizon_workspace.sh --root .
 ```
 
-Default output directory:
-- `docs/long-horizon/Prompt.md`
-- `docs/long-horizon/Plans.md`
-- `docs/long-horizon/Implement.md`
-- `docs/long-horizon/Documentation.md`
-
-Use a custom directory when needed:
-
-```bash
-./scripts/init_long_horizon_workspace.sh --root . --dir docs/agent-control
-```
-
-Validate that required files exist and contain core sections:
+Validate planning docs shape:
 
 ```bash
 ./scripts/validate_long_horizon_workspace.sh --root .
+```
+
+Run objective-first loop execution:
+
+```bash
+./scripts/run_long_horizon_loop.sh \
+  --cwd . \
+  --engine codex \
+  --max-iterations 20 \
+  --validate-cmd "npm test"
+```
+
+Resume an interrupted run:
+
+```bash
+./scripts/run_long_horizon_loop.sh --cwd . --engine codex --resume
+```
+
+Stop a running loop safely:
+
+```bash
+touch ./.codex/long-horizon-loop/STOP
 ```
 
 Install this skill into Codex skills:
@@ -42,53 +55,65 @@ Install this skill into Codex skills:
 ./scripts/install_skill.sh --target-dir "$HOME/.codex/skills" --force
 ```
 
-## Workflow
+## Modes
 
-1. Capture intent in `Prompt.md`.
-Write objective, acceptance criteria, constraints, non-goals, and assumptions before implementation.
+1. Planning mode
+- Capture objective, acceptance criteria, constraints, and scope in `Prompt.md`.
+- Decompose milestones and verification in `Plans.md`.
+- Maintain execution contract in `Implement.md`.
+- Keep `Documentation.md` synchronized with shipped behavior.
 
-2. Expand execution in `Plans.md`.
-Break work into milestones with scope, key files, acceptance criteria, and verification commands.
-Keep a risk register and decision log.
+2. Execution mode
+- Run `run_long_horizon_loop.sh` for mandatory work/review iterations.
+- Work phase emits machine-readable work JSON.
+- Review phase emits machine-readable decision JSON (`SHIP`/`REVISE`/`BLOCKED`).
+- Optional verification commands are evidence, not the task definition.
+- Runtime state lives in `.codex/long-horizon-loop/` and supports resume.
 
-3. Lock operating rules in `Implement.md`.
-Define autonomy level, iteration loop, validation cadence, blocked handling, and stop conditions.
+## Execution Contract (v0.1)
 
-4. Keep `Documentation.md` live.
-Update setup, architecture, runbook, and troubleshooting as milestones land.
-Do not defer documentation to the end.
+- Engine interface is pluggable; v0.1 ships `codex` and `claude` implementations.
+- `--engine claude` is supported for non-interactive structured runs when `claude` CLI is available.
+- Completion is strict dual-gate:
+  - work reports `COMPLETE`
+  - reviewer decides `SHIP`
+  - optional verification (if configured) passes
+  - progress gate passes or no-change is explicitly justified
+- Blocking is explicit:
+  - worker reports `BLOCKED` with reason
+  - reviewer confirms blocker is genuine/external
+  - runner writes `RALPH-BLOCKED.md` and stops `task_blocked`
 
-5. Reconcile at checkpoints.
-After each milestone, update:
-- milestone status in `Plans.md`
-- key decision notes in `Plans.md`
-- docs reality in `Documentation.md`
+## Planner Sync Behavior
 
-## Operating Rules
+The runner auto-syncs planner docs each iteration when they exist:
+- `Plans.md` -> `## Loop Status`
+- `Documentation.md` -> `## Runtime Execution Notes`
 
-- Use small, reviewable milestone slices.
-- Run verification commands for each milestone and record outcomes.
-- If ambiguity appears, decide explicitly and document it in `Plans.md` before continuing.
-- If blocked, document blocker, attempted mitigations, and next unblocking action.
-- Prefer deterministic outputs and explicit quality gates.
+At startup, if no explicit prompt/objective is supplied, the runner seeds objective and acceptance criteria from:
+- `docs/long-horizon/Prompt.md` sections `## Objective` and `## Acceptance Criteria`
 
-## Standard File Roles
+## Core Runtime Files
 
-- `Prompt.md`: Why and what success means.
-- `Plans.md`: How work is sequenced and verified.
-- `Implement.md`: How to execute continuously without drift.
-- `Documentation.md`: What shipped and how to run/use it.
-
-## Expected Output When Using This Skill
-
-When this skill is applied to a repo, produce:
-- A filled `Prompt.md` with concrete objective and acceptance criteria.
-- A milestone-based `Plans.md` with risk register and verification checklist.
-- An `Implement.md` contract that enables continuous execution.
-- A `Documentation.md` draft that stays synced as implementation progresses.
-- A short status summary of changed files and current next milestone.
+Under `.codex/long-horizon-loop/`:
+- `state.env`
+- `objective.md`
+- `acceptance-criteria.md`
+- `feedback.md`
+- `work-summary.md`
+- `review-feedback.md`
+- `review-result.txt`
+- `RALPH-BLOCKED.md`
+- `.loop-complete`
+- `work-schema.json`
+- `review-schema.json`
+- `iteration-history.md`
+- `run-summary.md`
+- `events.log` / `events.jsonl`
+- `validation/`
+- `codex/iteration-<n>-<phase>-attempt-<m>.jsonl`
 
 ## References
 
-- For concise rationale and patterns from OpenAI long-horizon guidance, read:
-  - `references/openai-long-horizon-notes.md`
+- `references/openai-long-horizon-notes.md`
+- `references/loop-runbook.md`

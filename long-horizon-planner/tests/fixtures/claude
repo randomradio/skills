@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+scenario="${CODEX_STUB_SCENARIO:-review_ship_complete}"
+state_dir="${CODEX_STUB_STATE_DIR:-$(mktemp -d)}"
+mkdir -p "$state_dir"
+count_file="$state_dir/call-count"
+call_count=0
+if [[ -f "$count_file" ]]; then
+  call_count="$(cat "$count_file")"
+fi
+call_count=$((call_count + 1))
+printf '%s\n' "$call_count" > "$count_file"
+
+prompt=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -p|--print|--output-format|--json-schema|--add-dir|--permission-mode|--model|--agent|--max-budget-usd|--input-format|--output-format)
+      if [[ $# -gt 1 ]]; then
+        shift 2
+      else
+        shift
+      fi
+      ;;
+    --dangerously-skip-permissions|--include-partial-messages|--no-session-persistence)
+      shift
+      ;;
+    --*)
+      if [[ $# -gt 1 && ! "${2}" =~ ^- ]]; then
+        shift 2
+      else
+        shift
+      fi
+      ;;
+    *)
+      prompt="$1"
+      shift
+      ;;
+  esac
+done
+
+phase="work"
+if [[ "$prompt" == *"Review Phase"* ]]; then
+  phase="review"
+fi
+
+touch_progress_file() {
+  local p
+  p="${WORK_DIR_FOR_PROGRESS:-$(pwd)}"
+  if [[ -n "$p" ]]; then
+    printf 'progress %s\n' "$(date -u +%s)" > "$p/progress.txt"
+  fi
+}
+
+case "$scenario" in
+  review_ship_complete)
+    if [[ "$phase" == "review" ]]; then
+      printf '%s\n' '{"decision":"SHIP","assessment":"Ready to ship.","feedback":"Shippable.","evidence":["review confirms acceptance criteria"]}'
+    else
+      touch_progress_file
+      printf '%s\n' '{"status":"COMPLETE","assessment":"Completed the objective.","evidence":["implemented change"],"next_step":"Await review decision"}'
+    fi
+    ;;
+  blocked_confirmed)
+    if [[ "$phase" == "review" ]]; then
+      printf '%s\n' '{"decision":"BLOCKED","assessment":"External blocker confirmed.","feedback":"Await external input.","evidence":["dependency unavailable"]}'
+    else
+      printf '%s\n' '{"status":"BLOCKED","assessment":"Blocked by external dependency.","evidence":["dependency missing"],"next_step":"Wait for external input","blocker_reason":"External dependency unavailable"}'
+    fi
+    ;;
+  review_ship_nochange)
+    if [[ "$phase" == "review" ]]; then
+      printf '%s\n' '{"decision":"SHIP","assessment":"Semantically complete.","feedback":"Can ship if no-change is justified.","evidence":["existing behavior already satisfies objective"]}'
+    else
+      printf '%s\n' '{"status":"COMPLETE","assessment":"Already satisfied.","evidence":["no additional edits required"],"next_step":"Await review decision"}'
+    fi
+    ;;
+  review_ship_nochange_justified)
+    if [[ "$phase" == "review" ]]; then
+      printf '%s\n' '{"decision":"SHIP","assessment":"No-change path is justified.","feedback":"Ready to ship.","evidence":["existing behavior meets criteria"]}'
+    else
+      printf '%s\n' '{"status":"COMPLETE","assessment":"Already satisfied.","evidence":["repo meets objective"],"next_step":"Await review decision","no_change_justification":"No code changes required"}'
+    fi
+    ;;
+  always_timeout)
+    sleep "${CODEX_STUB_TIMEOUT_SLEEP:-30}"
+    ;;
+  timeout_then_ship)
+    if [[ "$call_count" -eq 1 ]]; then
+      sleep "${CODEX_STUB_TIMEOUT_SLEEP:-30}"
+    elif [[ "$phase" == "review" ]]; then
+      printf '%s\n' '{"decision":"SHIP","assessment":"Ready after retry.","feedback":"Ship it.","evidence":["review after retry"]}'
+    else
+      touch_progress_file
+      printf '%s\n' '{"status":"COMPLETE","assessment":"Completed after retry.","evidence":["retried and finished"],"next_step":"Await review decision"}'
+    fi
+    ;;
+  work_in_progress)
+    if [[ "$phase" == "review" ]]; then
+      printf '%s\n' '{"decision":"REVISE","assessment":"Still in progress.","feedback":"Continue.","evidence":["worker not complete"]}'
+    else
+      touch_progress_file
+      printf '%s\n' '{"status":"IN_PROGRESS","assessment":"Partial progress made.","evidence":["partial work"],"next_step":"Finish remaining steps"}'
+    fi
+    ;;
+  *)
+    printf '%s\n' '{"status":"IN_PROGRESS","assessment":"Default in-progress.","evidence":["default path"],"next_step":"Continue"}'
+    ;;
+esac

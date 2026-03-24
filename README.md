@@ -45,6 +45,18 @@ Generated files:
 - `docs/long-horizon/Implement.md`
 - `docs/long-horizon/Documentation.md`
 
+Run objective-first loop execution (v0.1):
+
+```bash
+~/.codex/skills/long-horizon-planner/scripts/run_long_horizon_loop.sh --cwd . --engine codex --max-iterations 20
+```
+
+Claude backend example:
+
+```bash
+~/.codex/skills/long-horizon-planner/scripts/run_long_horizon_loop.sh --cwd . --engine claude --engine-bin claude --max-iterations 20
+```
+
 Custom output directory example:
 
 ```bash
