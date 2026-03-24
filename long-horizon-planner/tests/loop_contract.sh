@@ -6,6 +6,7 @@ SKILL_FILE="$ROOT_DIR/SKILL.md"
 RUNBOOK_FILE="$ROOT_DIR/references/loop-runbook.md"
 AGENT_FILE="$ROOT_DIR/agents/openai.yaml"
 RUNNER_FILE="$ROOT_DIR/scripts/run_long_horizon_loop.sh"
+UPDATE_CHECK_FILE="$ROOT_DIR/scripts/check_for_updates.sh"
 INIT_FILE="$ROOT_DIR/scripts/init_long_horizon_workspace.sh"
 VALIDATE_FILE="$ROOT_DIR/scripts/validate_long_horizon_workspace.sh"
 CODEX_ADAPTER="$ROOT_DIR/scripts/lib/engines/codex.sh"
@@ -56,6 +57,7 @@ expect_executable() {
 }
 
 expect_executable "runner script is executable" "$RUNNER_FILE"
+expect_executable "update check script is executable" "$UPDATE_CHECK_FILE"
 expect_executable "codex adapter is executable" "$CODEX_ADAPTER"
 expect_executable "claude adapter is executable" "$CLAUDE_ADAPTER"
 expect_contains "skill references execution mode" "Execution mode" "$SKILL_FILE"

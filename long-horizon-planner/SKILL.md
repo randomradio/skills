@@ -13,6 +13,18 @@ Use this as a hybrid long-horizon system:
 
 The planning docs remain source of truth; loop artifacts provide reliable execution telemetry and resume support.
 
+## Update Check On Invocation
+
+When this skill is loaded, run:
+
+```bash
+./scripts/check_for_updates.sh --quiet
+```
+
+If status is `update_available`, tell the user to run:
+- `$randomradio-upgrade`
+- or `~/.codex/skills/randomradio-upgrade/scripts/upgrade_skills.sh --skills long-horizon-planner`
+
 ## Quick Start
 
 Initialize planning docs in a repo:

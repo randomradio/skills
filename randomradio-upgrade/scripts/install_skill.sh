@@ -4,7 +4,7 @@ set -euo pipefail
 FORCE=0
 NON_INTERACTIVE=0
 TARGET_DIR=""
-SKILL_NAME="long-horizon-planner"
+SKILL_NAME="randomradio-upgrade"
 REPO_URL="https://github.com/randomradio/skills.git"
 REPO_BRANCH="master"
 
@@ -12,13 +12,6 @@ usage() {
   cat <<USAGE
 Usage:
   install_skill.sh [--target-dir <path>] [--force] [--non-interactive]
-
-Behavior:
-- If --target-dir is omitted, auto-picks first existing skills directory from:
-  1) \$CODEX_HOME/skills
-  2) ~/.codex/skills
-  3) ~/.claude/skills
-- If none exists, defaults to ~/.codex/skills
 USAGE
 }
 
@@ -119,7 +112,7 @@ cat <<EOF_DONE
 Installed skill to: $DEST
 
 Next:
-1. Use the skill by name: long-horizon-planner
-2. In a repo, scaffold plan docs:
-   $DEST/scripts/init_long_horizon_workspace.sh --root .
+1. Use the skill by name: randomradio-upgrade
+2. Run:
+   $DEST/scripts/upgrade_skills.sh
 EOF_DONE

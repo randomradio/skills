@@ -17,6 +17,12 @@ Use this runbook for v0.1 objective-first execution with `run_long_horizon_loop.
   --max-iterations 40
 ```
 
+Check if installed skill is behind latest repo version:
+
+```bash
+~/.codex/skills/long-horizon-planner/scripts/check_for_updates.sh
+```
+
 ## Resume
 
 ```bash

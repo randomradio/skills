@@ -20,6 +20,7 @@ This repo is a small workspace wrapper around the actual `gstack` project, which
 Custom local skills in this repo:
 - [`quick-shoutout/`](quick-shoutout/) — deployment scaffold/publish helper skill (ported from `latentvibe-publish` and invokable as `quick-shoutout`).
 - [`long-horizon-planner/`](long-horizon-planner/) — planning skill for long-running tasks using durable control files (`Prompt.md`, `Plans.md`, `Implement.md`, `Documentation.md`).
+- [`randomradio-upgrade/`](randomradio-upgrade/) — upgrade helper skill to refresh managed skills from the latest `randomradio/skills` repository state.
 
 Install `quick-shoutout` into your Codex skills directory:
 
@@ -31,6 +32,18 @@ Install `long-horizon-planner` into your Codex skills directory:
 
 ```bash
 cd long-horizon-planner && ./scripts/install_skill.sh --target-dir "$HOME/.codex/skills" --force
+```
+
+Install `randomradio-upgrade` into your Codex skills directory:
+
+```bash
+cd randomradio-upgrade && ./scripts/install_skill.sh --target-dir "$HOME/.codex/skills" --force
+```
+
+Upgrade managed skills to latest:
+
+```bash
+~/.codex/skills/randomradio-upgrade/scripts/upgrade_skills.sh
 ```
 
 Scaffold long-horizon planning docs in a repo (default output: `docs/long-horizon/`):

@@ -5,6 +5,8 @@ FORCE=0
 NON_INTERACTIVE=0
 TARGET_DIR=""
 SKILL_NAME="quick-shoutout"
+REPO_URL="https://github.com/randomradio/skills.git"
+REPO_BRANCH="master"
 
 usage() {
   cat <<USAGE
@@ -99,6 +101,19 @@ if command -v rsync >/dev/null 2>&1; then
 else
   cp -R "$SKILL_DIR/." "$DEST/"
 fi
+
+INSTALL_COMMIT="unknown"
+if git -C "$SKILL_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  INSTALL_COMMIT="$(git -C "$SKILL_DIR" rev-parse HEAD)"
+fi
+
+cat > "$DEST/.randomradio-skill-meta" <<EOF_META
+SKILL_NAME=$SKILL_NAME
+INSTALL_COMMIT=$INSTALL_COMMIT
+INSTALLED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+REPO_URL=$REPO_URL
+REPO_BRANCH=$REPO_BRANCH
+EOF_META
 
 cat <<EOF_DONE
 Installed skill to: $DEST

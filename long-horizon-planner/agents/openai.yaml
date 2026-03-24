@@ -1,4 +1,4 @@
 interface:
   display_name: "Long Horizon Planner"
   short_description: "Plan long-running work and execute objective-first loop runs."
-  default_prompt: "Use $long-horizon-planner to create long-horizon control files, then run objective-first work/review loops with resumable state when execution is requested."
+  default_prompt: "Use $long-horizon-planner to create long-horizon control files, check for updates on load, then run objective-first work/review loops with resumable state when execution is requested."

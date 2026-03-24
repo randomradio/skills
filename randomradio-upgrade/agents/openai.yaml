@@ -1,0 +1,4 @@
+interface:
+  display_name: "RandomRadio Upgrade"
+  short_description: "Upgrade RandomRadio-managed skills from GitHub."
+  default_prompt: "Use $randomradio-upgrade to refresh local RandomRadio skills to the latest repository version."
