@@ -22,6 +22,8 @@ Use four files as operational control points:
 - Record assumptions and decisions when ambiguity appears.
 - Keep a standing verification checklist in `Plans.md` and update it continuously.
 - Treat verification as evidence of progress, not as a substitute for delivering requested behavior.
+- Treat durable planning files as the control plane. Use lower-level skills and workflows as execution tactics underneath that control plane.
+- Keep roadmap-level sequencing separate from milestone-level task decomposition.
 
 ## Suggested cadence
 
@@ -34,3 +36,11 @@ Use four files as operational control points:
 This approach overlaps with objective-first loop systems (for example Ralph-style loops), but this skill focuses on planning and operating contract files first so long-running implementation remains readable, resumable, and auditable.
 
 In v0.1, this skill adds a runnable objective-first loop (`scripts/run_long_horizon_loop.sh`) while preserving the four planner files as the control plane.
+
+## Composition note
+
+This pattern composes well with skill-driven execution systems such as Superpowers:
+
+- Long-horizon files keep durable intent, risks, milestones, and docs.
+- A delegated execution skill can own the step-by-step plan for the current milestone.
+- Results from delegated execution should be folded back into the long-horizon files at milestone checkpoints.

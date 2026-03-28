@@ -128,6 +128,16 @@ Acceptance criteria:
 Verification commands:
 - [command]
 
+Execution workflow:
+- [ ] Objective-first loop runner
+- [ ] Superpowers writing-plans
+- [ ] Superpowers subagent-driven-development
+- [ ] Superpowers executing-plans
+- [ ] Other: [workflow]
+
+Execution artifact:
+- [docs/superpowers/plans/<date>-<milestone>.md, loop run ID, or equivalent]
+
 Status:
 - [ ] not started
 - [ ] in progress
@@ -146,6 +156,16 @@ Acceptance criteria:
 Verification commands:
 - [command]
 
+Execution workflow:
+- [ ] Objective-first loop runner
+- [ ] Superpowers writing-plans
+- [ ] Superpowers subagent-driven-development
+- [ ] Superpowers executing-plans
+- [ ] Other: [workflow]
+
+Execution artifact:
+- [docs/superpowers/plans/<date>-<milestone>.md, loop run ID, or equivalent]
+
 Status:
 - [ ] not started
 - [ ] in progress
@@ -163,6 +183,16 @@ Acceptance criteria:
 
 Verification commands:
 - [command]
+
+Execution workflow:
+- [ ] Objective-first loop runner
+- [ ] Superpowers writing-plans
+- [ ] Superpowers subagent-driven-development
+- [ ] Superpowers executing-plans
+- [ ] Other: [workflow]
+
+Execution artifact:
+- [docs/superpowers/plans/<date>-<milestone>.md, loop run ID, or equivalent]
 
 Status:
 - [ ] not started
@@ -203,19 +233,39 @@ Last updated: $TODAY
 - Treat Prompt.md and Plans.md as source of truth.
 - If scope changes, update Plans.md before continuing.
 
+## Execution Stack
+- Top level: long-horizon-planner owns objective, milestone sequencing, decisions, and checkpoint state.
+- Milestone level: use a separate execution artifact for the active milestone.
+- Execution options:
+  - Objective-first loop runner for resumable work/review iterations
+  - Superpowers \`writing-plans\` for milestone task decomposition
+  - Superpowers \`subagent-driven-development\` for execution with review loops
+  - Superpowers \`executing-plans\` when subagents are unavailable or not desired
+
 ## Iteration Loop
 1. Pick the highest-priority incomplete milestone.
-2. Implement the smallest coherent change to satisfy milestone acceptance.
-3. Run milestone verification commands.
-4. Fix failures immediately.
-5. Update Plans.md status and decision log.
-6. Continue to the next milestone.
+2. Choose the execution mode for the active milestone.
+3. If the milestone is non-trivial, create or update a detailed milestone execution artifact before coding.
+4. Execute the current milestone using the selected workflow.
+5. Run milestone verification commands.
+6. Fix failures immediately.
+7. Update Plans.md status, execution artifact link, and decision log.
+8. Reconcile shipped behavior into Documentation.md.
+9. Continue to the next milestone.
 
 ## Bug Handling
 1. Reproduce with a focused test when possible.
 2. Implement minimal fix.
 3. Re-run relevant verification.
 4. Record bug and fix note in Plans.md.
+
+## Delegation Rules
+- Do not expand Plans.md into a step-by-step task list for large milestones.
+- Keep Plans.md at the milestone and checkpoint layer.
+- Put detailed task decomposition into a milestone-specific execution artifact.
+- If Superpowers is available, default to using it for detailed milestone planning and execution on non-trivial milestones.
+- If the milestone is better suited for objective-first exploration or needs resumable structured review, use the loop runner instead.
+- If the milestone is trivial, direct execution without a delegated artifact is acceptable.
 
 ## Blocked Protocol
 When blocked:

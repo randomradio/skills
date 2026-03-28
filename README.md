@@ -15,12 +15,13 @@ This workspace contains the `gstack/` project locally, but the install flow abov
 
 ## What lives here
 
-This repo is a small workspace wrapper around the actual `gstack` project, which lives in [`gstack/`](gstack/). If you landed on the repo root and want to understand the project quickly, use the links below instead of treating the root as a second copy of the product docs.
+This repo is a small workspace wrapper around the actual `gstack` project, which lives in [`gstack/`](gstack/). It also carries standalone skills and vendored skill packs for personal use. If you landed on the repo root and want to understand the project quickly, use the links below instead of treating the root as a second copy of the product docs.
 
 Custom local skills in this repo:
 - [`quick-shoutout/`](quick-shoutout/) — deployment scaffold/publish helper skill (ported from `latentvibe-publish` and invokable as `quick-shoutout`).
-- [`long-horizon-planner/`](long-horizon-planner/) — planning skill for long-running tasks using durable control files (`Prompt.md`, `Plans.md`, `Implement.md`, `Documentation.md`).
+- [`long-horizon-planner/`](long-horizon-planner/) — planning skill for long-running tasks using durable control files (`Prompt.md`, `Plans.md`, `Implement.md`, `Documentation.md`), now able to delegate active milestones to Superpowers-style execution workflows.
 - [`randomradio-upgrade/`](randomradio-upgrade/) — upgrade helper skill to refresh managed skills from the latest `randomradio/skills` repository state.
+- [`superpowers/`](superpowers/) — vendored snapshot of `obra/superpowers` for milestone-level planning and execution workflows.
 
 Install `quick-shoutout` into your Codex skills directory:
 
@@ -44,6 +45,12 @@ Upgrade managed skills to latest:
 
 ```bash
 ~/.codex/skills/randomradio-upgrade/scripts/upgrade_skills.sh
+```
+
+Upgrade only `long-horizon-planner`:
+
+```bash
+~/.codex/skills/randomradio-upgrade/scripts/upgrade_skills.sh --skills long-horizon-planner
 ```
 
 Scaffold long-horizon planning docs in a repo (default output: `docs/long-horizon/`):
@@ -84,6 +91,8 @@ Custom output directory example:
 - [`gstack/CONTRIBUTING.md#quick-start`](gstack/CONTRIBUTING.md#quick-start) — contributor setup, dev mode, and test workflow.
 - [`gstack/ARCHITECTURE.md#the-core-idea`](gstack/ARCHITECTURE.md#the-core-idea) — how the browser daemon, SKILL.md system, and generated docs fit together.
 - [`gstack/CHANGELOG.md`](gstack/CHANGELOG.md) — release history and what changed recently.
+- [`long-horizon-planner/SKILL.md`](long-horizon-planner/SKILL.md) — top-level orchestration skill for long-running work.
+- [`superpowers/UPSTREAM.md`](superpowers/UPSTREAM.md) — upstream source, pinned commit, and refresh instructions for the vendored Superpowers skills.
 
 ## Go deeper
 
@@ -92,3 +101,5 @@ Custom output directory example:
 - Want to contribute: read [`gstack/CONTRIBUTING.md#quick-start`](gstack/CONTRIBUTING.md#quick-start).
 - Want to understand the internals: read [`gstack/ARCHITECTURE.md#the-core-idea`](gstack/ARCHITECTURE.md#the-core-idea).
 - Want recent changes: scan [`gstack/CHANGELOG.md`](gstack/CHANGELOG.md).
+- Want the long-running orchestration workflow: read [`long-horizon-planner/SKILL.md`](long-horizon-planner/SKILL.md).
+- Want the vendored Superpowers snapshot details: read [`superpowers/UPSTREAM.md`](superpowers/UPSTREAM.md).
