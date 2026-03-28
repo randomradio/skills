@@ -103,14 +103,12 @@ if [[ "$DRY_RUN" -eq 0 ]]; then
 fi
 
 DISCOVERY_ROOT="$CACHE_DIR"
-if [[ "$DRY_RUN" -eq 1 && ! -d "$CACHE_DIR" ]]; then
-  if [[ -d "$REPO_URL" ]]; then
-    DISCOVERY_ROOT="$(cd "$REPO_URL" && pwd)"
-    echo "[DRY] Using local repo for discovery: $DISCOVERY_ROOT"
-  elif [[ -z "$SKILLS_CSV" ]]; then
-    echo "[ERROR] Dry run without an existing cache requires either a local repo path via --repo-url or an explicit --skills list" >&2
-    exit 1
-  fi
+if [[ "$DRY_RUN" -eq 1 && -d "$REPO_URL" ]]; then
+  DISCOVERY_ROOT="$(cd "$REPO_URL" && pwd)"
+  echo "[DRY] Using local repo for discovery: $DISCOVERY_ROOT"
+elif [[ "$DRY_RUN" -eq 1 && ! -d "$CACHE_DIR" && -z "$SKILLS_CSV" ]]; then
+  echo "[ERROR] Dry run without an existing cache requires either a local repo path via --repo-url or an explicit --skills list" >&2
+  exit 1
 fi
 
 discover_installable_skills() {

@@ -21,7 +21,7 @@ Custom local skills in this repo:
 - [`quick-shoutout/`](quick-shoutout/) — deployment scaffold/publish helper skill (ported from `latentvibe-publish` and invokable as `quick-shoutout`).
 - [`long-horizon-planner/`](long-horizon-planner/) — planning skill for long-running tasks using durable control files (`Prompt.md`, `Plans.md`, `Implement.md`, `Documentation.md`), now able to delegate active milestones to Superpowers-style execution workflows.
 - [`randomradio-upgrade/`](randomradio-upgrade/) — upgrade helper skill to refresh managed skills from the latest `randomradio/skills` repository state.
-- [`superpowers/`](superpowers/) — vendored snapshot of `obra/superpowers` for milestone-level planning and execution workflows.
+- [`superpowers/`](superpowers/) — vendored snapshot of `obra/superpowers` for milestone-level planning and execution workflows, now installable via this repo.
 
 Install `quick-shoutout` into your Codex skills directory:
 
@@ -41,13 +41,19 @@ Install `randomradio-upgrade` into your Codex skills directory:
 cd randomradio-upgrade && ./scripts/install_skill.sh --target-dir "$HOME/.codex/skills" --force
 ```
 
+Install the vendored `superpowers` pack into your Codex skills directory:
+
+```bash
+cd superpowers && ./scripts/install_skill.sh --target-dir "$HOME/.codex/skills" --force
+```
+
 Upgrade managed skills to latest:
 
 ```bash
 ~/.codex/skills/randomradio-upgrade/scripts/upgrade_skills.sh
 ```
 
-That upgrades every top-level skill in this repo that ships `scripts/install_skill.sh`.
+That upgrades every top-level skill or skill pack in this repo that ships `scripts/install_skill.sh`.
 
 Upgrade only `long-horizon-planner`:
 
