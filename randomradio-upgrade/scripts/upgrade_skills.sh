@@ -5,13 +5,17 @@ TARGET_DIR=""
 REPO_URL="https://github.com/randomradio/skills.git"
 REPO_BRANCH="master"
 CACHE_DIR="$HOME/.cache/randomradio-skills/repo"
-SKILLS_CSV="long-horizon-planner,quick-shoutout,randomradio-upgrade"
+SKILLS_CSV=""
 DRY_RUN=0
 
 usage() {
   cat <<USAGE
 Usage:
   upgrade_skills.sh [--target-dir <path>] [--repo-url <url>] [--branch <name>] [--cache-dir <path>] [--skills <csv>] [--dry-run]
+
+Behavior:
+- With no --skills, auto-discovers every top-level skill in the repo that has scripts/install_skill.sh
+- With --skills, upgrades only the named subset
 USAGE
 }
 
@@ -98,19 +102,56 @@ if [[ "$DRY_RUN" -eq 0 ]]; then
   repo_commit="$(git -C "$CACHE_DIR" rev-parse HEAD)"
 fi
 
-IFS=',' read -r -a skill_list <<< "$SKILLS_CSV"
+DISCOVERY_ROOT="$CACHE_DIR"
+if [[ "$DRY_RUN" -eq 1 && ! -d "$CACHE_DIR" ]]; then
+  if [[ -d "$REPO_URL" ]]; then
+    DISCOVERY_ROOT="$(cd "$REPO_URL" && pwd)"
+    echo "[DRY] Using local repo for discovery: $DISCOVERY_ROOT"
+  elif [[ -z "$SKILLS_CSV" ]]; then
+    echo "[ERROR] Dry run without an existing cache requires either a local repo path via --repo-url or an explicit --skills list" >&2
+    exit 1
+  fi
+fi
+
+discover_installable_skills() {
+  local repo_root="$1"
+  find "$repo_root" -mindepth 3 -maxdepth 3 -type f -path "$repo_root/*/scripts/install_skill.sh" \
+    | sed -E "s#^$repo_root/([^/]+)/scripts/install_skill\\.sh#\\1#" \
+    | sort -u
+}
+
+skill_list=()
+if [[ -n "$SKILLS_CSV" ]]; then
+  IFS=',' read -r -a skill_list <<< "$SKILLS_CSV"
+else
+  while IFS= read -r skill; do
+    [[ -n "$skill" ]] || continue
+    skill_list+=("$skill")
+  done < <(discover_installable_skills "$DISCOVERY_ROOT")
+fi
+
+if [[ "${#skill_list[@]}" -eq 0 ]]; then
+  echo "[ERROR] No installable skills found to upgrade" >&2
+  exit 1
+fi
 
 echo "[INFO] Target skills dir: $TARGET_DIR"
 echo "[INFO] Repo: $REPO_URL"
 echo "[INFO] Branch: $REPO_BRANCH"
 echo "[INFO] Commit: $repo_commit"
+if [[ -n "$SKILLS_CSV" ]]; then
+  echo "[INFO] Mode: explicit subset"
+else
+  echo "[INFO] Mode: auto-discover installable skills"
+fi
+echo "[INFO] Skills: ${skill_list[*]}"
 
 for skill in "${skill_list[@]}"; do
   skill="$(echo "$skill" | xargs)"
   [[ -n "$skill" ]] || continue
 
   installer="$CACHE_DIR/$skill/scripts/install_skill.sh"
-  if [[ ! -x "$installer" ]]; then
+  if [[ ! -f "$installer" ]]; then
     if [[ "$DRY_RUN" -eq 1 ]]; then
       echo "[DRY] Would upgrade $skill (installer path unresolved in dry-run: $installer)"
       continue
@@ -125,7 +166,7 @@ for skill in "${skill_list[@]}"; do
   fi
 
   echo "[INFO] Upgrading $skill"
-  "$installer" --target-dir "$TARGET_DIR" --force --non-interactive >/dev/null
+  bash "$installer" --target-dir "$TARGET_DIR" --force --non-interactive >/dev/null
 
 done
 

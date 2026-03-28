@@ -47,6 +47,8 @@ Upgrade managed skills to latest:
 ~/.codex/skills/randomradio-upgrade/scripts/upgrade_skills.sh
 ```
 
+That upgrades every top-level skill in this repo that ships `scripts/install_skill.sh`.
+
 Upgrade only `long-horizon-planner`:
 
 ```bash

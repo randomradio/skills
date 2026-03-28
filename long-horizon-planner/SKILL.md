@@ -24,7 +24,7 @@ When this skill is loaded, run:
 
 If status is `update_available`, tell the user to run:
 - `$randomradio-upgrade`
-- or `~/.codex/skills/randomradio-upgrade/scripts/upgrade_skills.sh --skills long-horizon-planner`
+- or `~/.codex/skills/randomradio-upgrade/scripts/upgrade_skills.sh --skills long-horizon-planner` if they only want this one skill
 
 ## Quick Start
 
