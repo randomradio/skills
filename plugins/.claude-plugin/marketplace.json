@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "randomradio-plugins",
+  "description": "RandomRadio's goal-driven development tools",
+  "owner": {
+    "name": "randomradio",
+    "email": "randomradio@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "randomradio",
+      "description": "Goal-driven development tools with structured planning, review, and autonomous execution.",
+      "source": "./randomradio",
+      "category": "development"
+    }
+  ]
+}
