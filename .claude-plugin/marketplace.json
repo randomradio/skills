@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "randomradio-skills",
+  "description": "Goal-driven development tools with structured planning, review, and autonomous execution.",
+  "owner": {
+    "name": "randomradio",
+    "email": "randomradio@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "randomradio",
+      "description": "Goal-driven development tools — 18 skills and 27 agents for planning, execution, review, debugging, and knowledge compounding.",
+      "source": "./plugins/randomradio",
+      "category": "development"
+    }
+  ]
+}
