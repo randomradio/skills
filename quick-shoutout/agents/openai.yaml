@@ -1,4 +1,0 @@
-interface:
-  display_name: "Quick Shoutout"
-  short_description: "Deploy apps to latentvibe.com with Workers, Pages, and Tunnel."
-  default_prompt: "Use this skill to scaffold and deploy apps to latentvibe.com with minimal friction."

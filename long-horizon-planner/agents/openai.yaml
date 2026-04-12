@@ -1,4 +1,0 @@
-interface:
-  display_name: "Long Horizon Planner"
-  short_description: "Plan long-running work, delegate milestone execution, or run objective-first loops."
-  default_prompt: "Use $long-horizon-planner to create long-horizon control files, check for updates on load, then choose the right execution mode for each milestone: delegated Superpowers-style execution for detailed tasks or objective-first loop runs when resumable structured iteration is a better fit."
