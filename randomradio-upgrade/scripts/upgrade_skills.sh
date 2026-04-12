@@ -65,6 +65,17 @@ has_codex()  { command -v codex >/dev/null 2>&1 || [[ -d "$HOME/.codex/skills" ]
 refresh_cache() {
   mkdir -p "$(dirname "$CACHE_DIR")"
 
+  # Safety: if cache-dir has unpushed commits, use it as-is (local dev mode)
+  if [[ -d "$CACHE_DIR/.git" ]]; then
+    local ahead
+    ahead="$(git -C "$CACHE_DIR" rev-list --count "origin/$REPO_BRANCH"..HEAD 2>/dev/null || echo 0)"
+    if [[ "$ahead" -gt 0 ]]; then
+      log "Local repo has $ahead unpushed commits — using as-is (no reset)"
+      log "Commit: $(git -C "$CACHE_DIR" rev-parse --short HEAD)"
+      return
+    fi
+  fi
+
   if [[ ! -d "$CACHE_DIR/.git" ]]; then
     if [[ "$DRY_RUN" -eq 1 ]]; then
       dry "Would clone $REPO_URL -> $CACHE_DIR"
