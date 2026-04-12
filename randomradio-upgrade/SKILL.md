@@ -1,53 +1,80 @@
 ---
 name: randomradio-upgrade
-description: Upgrade installable RandomRadio-managed skills from the latest GitHub repository state into your local Codex/Claude skills directory. Use when you want to refresh everything this repo can install, or a selected subset with --skills.
+description: Upgrade the randomradio plugin across platforms. Supports Claude Code (native plugin system) and Codex (flat skills directory). Auto-detects installed platforms by default.
 ---
 
 # RandomRadio Upgrade
 
 ## Overview
 
-Use this skill to update managed local skills from the latest `randomradio/skills` repository.
+Pull the latest `randomradio/skills` repo and install/update the plugin on all detected platforms.
 
-Managed skills (default):
-- Auto-discovers every top-level skill in the repo that ships `scripts/install_skill.sh`
-- Reinstalls all of them unless you pass `--skills ...`
-- Keeps `--skills` as an explicit subset filter
+**Supported platforms:**
+- **Claude Code** — updates via `claude plugin update randomradio`
+- **Codex** — flattens skills + agents into `~/.codex/skills/<name>/SKILL.md`
 
 ## Usage
 
-Run upgrade with auto-detected skills directory:
+Auto-detect platforms and upgrade all:
 
 ```bash
 ./scripts/upgrade_skills.sh
 ```
 
-Explicit target directory:
+Upgrade Claude Code only:
 
 ```bash
-./scripts/upgrade_skills.sh --target-dir "$HOME/.codex/skills"
+./scripts/upgrade_skills.sh --target claude
 ```
 
-Upgrade only selected skills:
+Upgrade Codex only:
 
 ```bash
-./scripts/upgrade_skills.sh --skills long-horizon-planner,randomradio-upgrade
+./scripts/upgrade_skills.sh --target codex
 ```
 
-Dry run:
+Upgrade all platforms:
+
+```bash
+./scripts/upgrade_skills.sh --target all
+```
+
+Explicit Codex skills directory:
+
+```bash
+./scripts/upgrade_skills.sh --target codex --codex-dir "$HOME/.codex/skills"
+```
+
+Dry run (show what would happen):
 
 ```bash
 ./scripts/upgrade_skills.sh --dry-run
 ```
 
-## Behavior
+Verbose output:
 
-- Pulls latest commit from `https://github.com/randomradio/skills.git` (`master` by default)
-- Auto-discovers installable skills from the repo when `--skills` is omitted
-- Reinstalls each selected skill with `--force --non-interactive`
-- Writes/refreshes `.randomradio-skill-meta` in each installed skill
-- Prints repo commit and upgrade summary
-- Vendored packs without `install_skill.sh` are not installed by this command; those update when you pull the repo checkout that contains them
+```bash
+./scripts/upgrade_skills.sh --verbose
+```
+
+## How It Works
+
+### Claude Code
+
+1. Pulls latest repo into `~/.cache/randomradio-skills/repo/`
+2. Registers `plugins/` as a local marketplace (if not already registered)
+3. Runs `claude plugin marketplace update` + `claude plugin update randomradio`
+
+### Codex
+
+1. Pulls latest repo into `~/.cache/randomradio-skills/repo/`
+2. Copies each skill directory into `~/.codex/skills/<skill-name>/`
+3. Copies each agent `.md` file as `~/.codex/skills/<agent-name>/SKILL.md`
+4. Both skills and agents become flat Codex skills (same pattern as compound-engineering)
+
+## Self-Update
+
+The script updates itself from the latest repo state on each run.
 
 ## Validation
 
