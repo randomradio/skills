@@ -18,43 +18,43 @@ Pull the latest `randomradio/skills` repo and install/update the plugin on all d
 Auto-detect platforms and upgrade all:
 
 ```bash
-./scripts/upgrade_skills.sh
+./randomradio-upgrade/scripts/upgrade_skills.sh
 ```
 
 Upgrade Claude Code only:
 
 ```bash
-./scripts/upgrade_skills.sh --target claude
+./randomradio-upgrade/scripts/upgrade_skills.sh --target claude
 ```
 
 Upgrade Codex only:
 
 ```bash
-./scripts/upgrade_skills.sh --target codex
+./randomradio-upgrade/scripts/upgrade_skills.sh --target codex
 ```
 
 Upgrade all platforms:
 
 ```bash
-./scripts/upgrade_skills.sh --target all
+./randomradio-upgrade/scripts/upgrade_skills.sh --target all
 ```
 
 Explicit Codex skills directory:
 
 ```bash
-./scripts/upgrade_skills.sh --target codex --codex-dir "$HOME/.codex/skills"
+./randomradio-upgrade/scripts/upgrade_skills.sh --target codex --codex-dir "$HOME/.codex/skills"
 ```
 
 Dry run (show what would happen):
 
 ```bash
-./scripts/upgrade_skills.sh --dry-run
+./randomradio-upgrade/scripts/upgrade_skills.sh --dry-run
 ```
 
 Verbose output:
 
 ```bash
-./scripts/upgrade_skills.sh --verbose
+./randomradio-upgrade/scripts/upgrade_skills.sh --verbose
 ```
 
 ## How It Works
@@ -79,5 +79,5 @@ The script updates itself from the latest repo state on each run.
 ## Validation
 
 ```bash
-./scripts/validate.sh
+./randomradio-upgrade/scripts/validate.sh
 ```

@@ -1,113 +1,136 @@
 ---
 name: rr:compound
-description: "Document a recently solved problem to compound your team's knowledge. Use after debugging sessions, bug fixes, or when the user says 'that worked', 'it's fixed', or 'document this'."
+description: "Document a recently solved problem to compound your team's knowledge. Use after debugging sessions, bug fixes, workflow discoveries, architecture decisions, or when the user says 'that worked', 'it's fixed', or 'document this'."
 argument-hint: "[optional brief context about what was solved]"
 ---
 
 # Compound
 
-Coordinate parallel subagents to document a recently solved problem. Each documented solution compounds your team's knowledge — the first time you solve a problem takes research, document it and the next occurrence takes minutes.
+Document a recently solved problem as a schema-backed learning in `docs/solutions/`.
 
 <compound_input> #$ARGUMENTS </compound_input>
 
 ## Purpose
 
-Captures problem solutions while context is fresh, creating structured documentation in `docs/solutions/` with YAML frontmatter for searchability.
+Capture solutions while context is fresh so future agents can search durable, versioned knowledge instead of rediscovering the same answer.
 
-## Step 1: Load Context
+## Support Files
 
-Read the **conversation history** to identify the most recently solved problem. Look for:
+Read these on demand; they are the source of truth for new learning docs:
+
+- `references/schema.yaml` -- canonical frontmatter fields, enum values, and bug-vs-knowledge track rules
+- `references/yaml-schema.md` -- category mapping and YAML safety rules
+- `assets/resolution-template.md` -- section order for bug-track and knowledge-track docs
+
+Do not invent frontmatter fields, enum values, categories, or section order from memory.
+
+## Execution Flow
+
+### 1. Identify the Learning
+
+Read the conversation and local repo context to identify the most recently solved problem. Look for:
+
 - Error messages that were debugged
-- Configuration issues that were fixed
-- Behavioral bugs that were traced and resolved
-- Performance problems that were optimized
-- Architecture decisions that were made after investigation
+- Broken behavior traced to a root cause
+- Configuration or environment issues that were fixed
+- Performance bottlenecks that were resolved
+- Architecture, convention, or workflow decisions made after investigation
 
-If `<compound_input>` contains a context hint, use it to focus the search.
+If `<compound_input>` contains a context hint, use it to focus the search. If no recent solution is obvious, ask the user what to document.
 
-If no recent solution is obvious, ask the user what they'd like to document.
+### 2. Classify Track and Category
 
-## Step 2: Classify the Learning
+Read `references/schema.yaml` and determine:
 
-Determine the category:
+- **Track**: bug or knowledge, based on `problem_type`
+- **Problem type**: the narrowest matching enum
+- **Component**: the closest schema enum
+- **Category directory**: from `references/yaml-schema.md`
+- **Filename**: `[sanitized-problem-slug]-[YYYY-MM-DD].md`
 
-| Category | Directory | Signal |
-|----------|-----------|--------|
-| Bug fix | `docs/solutions/bugs/` | Error was traced to root cause and fixed |
-| Configuration | `docs/solutions/config/` | Settings, environment, or deployment issue |
-| Architecture | `docs/solutions/architecture/` | Design decision or structural change |
-| Performance | `docs/solutions/performance/` | Optimization or bottleneck resolution |
-| Integration | `docs/solutions/integration/` | Third-party service or API issue |
-| Workflow | `docs/solutions/workflow/` | Development process improvement |
+Bug-track docs require `symptoms`, `root_cause`, and `resolution_type`. Knowledge-track docs require only the shared fields plus useful optional context such as `applies_when`.
 
-## Step 3: Check for Duplicates
+### 3. Search for Existing Docs
 
-Search `docs/solutions/` for existing documents covering the same problem:
+Search `docs/solutions/` before writing:
 
 ```bash
-grep -r "[key terms from the problem]" docs/solutions/ 2>/dev/null
+rg -n "<keywords>|<module>|<error text>" docs/solutions 2>/dev/null
 ```
 
-If a related document exists:
-- **Same problem, same solution:** Skip — tell the user it's already documented
-- **Same problem, different solution:** Update the existing document with the new approach
-- **Related but distinct:** Proceed with new document, add cross-reference
+Assess overlap across:
 
-## Step 4: Write the Document
+- Problem statement
+- Root cause
+- Solution approach
+- Referenced files or modules
+- Prevention guidance
 
-Create the file at `docs/solutions/<category>/YYYY-MM-DD-<descriptive-slug>.md`:
+Use this decision table:
 
-```markdown
----
-title: [Clear problem title]
-date: YYYY-MM-DD
-category: [bug|config|architecture|performance|integration|workflow]
-tags: [relevant, technology, tags]
-severity: [low|medium|high|critical]
-time_to_resolve: [approximate time spent]
----
+| Overlap | Action |
+|---------|--------|
+| High: same problem, root cause, and solution | Update the existing doc in place; add `last_updated: YYYY-MM-DD` |
+| Moderate: related area but distinct angle | Create a new doc and cross-reference the related doc |
+| Low or none | Create a new doc |
 
-## Problem
+### 4. Assemble the Document
 
-[What went wrong — symptoms, error messages, observed behavior]
+Read `assets/resolution-template.md` and use the template for the selected track. Preserve the template section order unless the user explicitly asks otherwise.
 
-## Root Cause
+Include:
 
-[Why it went wrong — the actual underlying issue]
+- A precise title
+- Schema-valid frontmatter
+- The observed problem or context
+- What failed or what changed during investigation
+- The actual solution with code snippets when useful
+- Why the solution works
+- Prevention, test, or workflow guidance
+- Related docs/issues when found
 
-## Solution
+Validate frontmatter against `references/schema.yaml` and the YAML safety rules in `references/yaml-schema.md`. Quote array items that start with YAML indicator characters or contain `: `.
 
-[What fixed it — specific steps, code changes, configuration]
+### 5. Write One Primary File
 
-## Prevention
+Write either:
 
-[How to prevent recurrence — tests added, monitoring, process changes]
+- The updated existing doc, or
+- A new file at `docs/solutions/<category>/<filename>.md`
 
-## Key Insight
+Only the final learning doc is the primary output. If discoverability needs a small instruction-file edit, that is maintenance, not a second learning artifact.
 
-[The non-obvious learning — what would help someone encountering this next time]
-```
+### 6. Discoverability Check
 
-## Step 5: Ensure Discoverability
-
-Check if `docs/solutions/` is referenced in project documentation:
+Check whether `AGENTS.md`, `CLAUDE.md`, or `README.md` would help a future agent discover `docs/solutions/`:
 
 ```bash
-grep -r "docs/solutions" CLAUDE.md AGENTS.md README.md 2>/dev/null
+rg -n "docs/solutions|documented solutions|learnings" AGENTS.md CLAUDE.md README.md 2>/dev/null
 ```
 
-If not referenced anywhere, suggest adding a pointer so future sessions can find the knowledge store.
+The instruction file should communicate:
 
-## Step 6: Commit
+- A searchable knowledge store exists
+- It is organized by category with YAML frontmatter such as `module`, `tags`, and `problem_type`
+- It is relevant when implementing or debugging in documented areas
 
-```bash
-git add docs/solutions/<category>/<filename>.md
-git commit -m "docs: compound learning — [brief description]"
+If this is missing, propose the smallest natural addition and get user consent before editing instruction files.
+
+### 7. Refresh Decision
+
+After writing the learning, consider `rr:compound-refresh` only when the new doc suggests older docs are stale, contradicted, overlapping, or superseded. Prefer a narrow scope hint, such as:
+
+```text
+rr:compound-refresh authentication
+rr:compound-refresh docs/solutions/best-practices/example.md
 ```
+
+Do not run a broad refresh automatically.
 
 ## Auto-Invoke Triggers
 
 Consider invoking this skill when you hear:
+
 - "that worked", "it's fixed", "finally"
 - "we should document this"
 - "next time we'll know"
