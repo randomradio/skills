@@ -1,0 +1,54 @@
+{
+  "skill_name": "trade-discipline-suite",
+  "baseline": "without_skill",
+  "evals": [
+    {
+      "id": 0,
+      "name": "size-and-gate",
+      "skill": "trade-planner",
+      "prompt": "I'm looking at a long on a small-cap that's running. My account is $8,000. I want to enter at $4.20, put my stop at $3.95 (that was the prior support that held), and target $4.95. Plan this trade and tell me whether it's a go.",
+      "expected_output": "Runs the bundled position_sizer.py, reports R:R = 3.0 (0.75/0.25), position size = 320 shares (1% of $8,000 = $80 risk / $0.25), daily max loss 3R = $240, and an explicit GO verdict (still must clear other gates).",
+      "files": [],
+      "assertions": [
+        {"name": "used_sizer_script", "text": "Ran the bundled position_sizer.py rather than hand-computing the numbers (output shows the script's TRADE PLAN block or states it executed the script)."},
+        {"name": "correct_rr_3to1", "text": "Reports reward:risk of 3.0 : 1 (reward $0.75 / risk $0.25)."},
+        {"name": "correct_size_320", "text": "Reports a position size of 320 shares (risk $80 at 1% of $8,000 / $0.25 per-share risk)."},
+        {"name": "daily_max_loss_stated", "text": "States the 3R daily max loss of $240."},
+        {"name": "explicit_go_verdict", "text": "Gives an explicit GO verdict for the plan (R:R >= 2), noting it still must clear the other gates."}
+      ]
+    },
+    {
+      "id": 1,
+      "name": "weekly-scale",
+      "skill": "weekly-audit",
+      "prompt": "Here's my trading journal for the last couple weeks: trade-discipline-suite-workspace/iteration-1/inputs/my_trading_week.csv . Review my week and tell me whether I should size up.",
+      "expected_output": "Runs position_sizer.py expectancy on the journal, reports positive expectancy (~+0.34R), win rate ~45%, payoff ~2.0, profit concentration ~84% (flagged as fragile), rule-break rate ~18%, and a HOLD / do-NOT-scale-up verdict given the concentration and rule-break rate, with a sample-size / net-of-costs caveat.",
+      "files": ["trade-discipline-suite-workspace/iteration-1/inputs/my_trading_week.csv"],
+      "assertions": [
+        {"name": "used_expectancy_script", "text": "Ran position_sizer.py expectancy --journal on the provided CSV (output shows the JOURNAL EXPECTANCY block or states it executed the script)."},
+        {"name": "expectancy_positive_reported", "text": "Reports a positive per-trade expectancy of roughly +0.34R."},
+        {"name": "concentration_reported", "text": "Reports profit concentration (top-3 winners ~84% of gross profit) and flags it as fragile / concentrated."},
+        {"name": "rule_break_rate_reported", "text": "Reports the rule-break rate (~18%, 4 of 22 trades)."},
+        {"name": "verdict_not_scale_up", "text": "Verdict is HOLD or do-NOT-scale-up (not an aggressive scale-up), justified by concentration and/or rule-break rate and borderline sample."},
+        {"name": "caveat_sample_or_costs", "text": "Notes the sample-size caveat (~20-30 trades min) and/or that R must be net of costs."}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "orchestrator-gate",
+      "skill": "trade-discipline",
+      "skill_installed_alone": true,
+      "prompt": "Should I take this trade? GENI is up 18% premarket on an FDA approval, float about 8M, relative volume looks like 6x, price $5.40. It's forming a bull flag near the highs. My account is $8,000 — I'd enter the breakout at $5.50, stop at $5.20, target $6.40. Walk me through whether to take it.",
+      "expected_output": "Runs all five gates in order with the inline thresholds: G1 CANDIDATE (price in $1-20, float <10M prime, rvol 6x, FDA catalyst, up 18%), G2 setup match (bull flag, ask if it's a predefined/backtested setup), G3 run the sizer -> R:R 3.0 (0.90/0.30) GO with a computed size, G4 state-check GO (no impulse), G5 cost-check net edge. States a verdict per gate, enforces all-GO, and frames as process not a buy recommendation.",
+      "files": [],
+      "assertions": [
+        {"name": "all_five_gates_run", "text": "Runs all five gates explicitly and in order (trade-screen, setup-match, trade-planner, state-check, cost-check)."},
+        {"name": "g1_thresholds_applied", "text": "Applies concrete G1 thresholds (price ~$1-20, float <10M/<20M, rvol >=5x, catalyst, already moving) to the GENI facts rather than vague approval."},
+        {"name": "g3_sizer_and_rr", "text": "For G3, runs/uses the sizer and reports R:R 3.0 (reward $0.90 / risk $0.30) with a computed share size."},
+        {"name": "per_gate_verdicts", "text": "States a GO/NO-GO (or CANDIDATE/MATCH) verdict for each gate."},
+        {"name": "all_go_enforced", "text": "Makes clear no entry happens unless all gates are GO (enforces the hard rule)."},
+        {"name": "process_not_advice", "text": "Frames the output as process/discipline, not a naked buy/sell recommendation or price prediction."}
+      ]
+    }
+  ]
+}

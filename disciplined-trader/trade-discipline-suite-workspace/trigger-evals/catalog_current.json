@@ -1,0 +1,54 @@
+[
+  {
+    "name": "consistency-audit",
+    "description": "Atomic weekly self-audit of rule-following behavior. Use this skill WHENEVER the user wants to grade their discipline or process \u2014 \"score my discipline\", \"am I being consistent\", \"self audit\", or \"rate my week\". It scores ten rule-adherence behaviors 1\u20135; a week that was green in dollars but low on adherence is flagged as variance, not skill. Judges process, not P&L. Process only."
+  },
+  {
+    "name": "cost-check",
+    "description": "Atomic Gate 5: confirm the edge survives real costs (gross vs net). Use this skill WHENEVER the user wants to validate that a thin edge clears fees \u2014 \"will this survive fees\", \"net this out\", \"is the edge real after costs\", or \"account for commissions/borrow/slippage\". Returns GO or NO-GO on a net basis. Published track records quote gross; the user lives on net. Process only."
+  },
+  {
+    "name": "execution-rules",
+    "description": "Atomic governance of an OPEN position. Use this skill WHENEVER the user is already in a trade or managing one live \u2014 \"I am in a trade\", \"should I move my stop\", \"should I add\", \"when do I take profit\", \"it is going against me\", or \"should I hold\". It enforces: never widen a stop, no averaging down, scale out into strength, move to break-even, and cut mechanically on invalidation. Process only; no buy/sell or hold recommendations beyond the user's own pre-set plan."
+  },
+  {
+    "name": "premarket-prep",
+    "description": "Atomic pre-session routine: set the day risk budget, scan for catalysts, and build a watchlist of names that pass the screen. Use this skill WHENEVER the user is preparing for a trading session \u2014 \"prep for the day\", \"build my watchlist\", \"morning routine\", \"what is my risk budget today\", or \"get me ready to trade\". Outputs a written day-plan and a candidate list; if nothing qualifies it concludes the logical number of trades today is zero. Process only; no buy/sell calls."
+  },
+  {
+    "name": "regime-check",
+    "description": "Atomic check of whether the niche is tradeable right now. Use this skill WHENEVER the user asks if today/this session is worth trading \u2014 \"is the market moving\", \"should I trade today\", \"is it a good day\", \"regime check\", or \"is there follow-through\". Returns TRADE / REDUCE / STAND-ASIDE with the logic. A volatility strategy in a flat tape has negative expectancy, so standing aside is a valid output. Process only; not a market forecast or buy/sell call."
+  },
+  {
+    "name": "risk-deescalation",
+    "description": "Atomic circuit-breaker for drawdown or tilt. Use this skill WHENEVER the user is losing or rattled \u2014 \"I keep losing\", \"I am on tilt\", \"bad day\", \"I blew up\", \"I hit my max loss\", or \"I cannot stop trading\". It OVERRIDES the normal pipeline: run it first, calmly. It throttles size, risk, and trade count until disciplined green days return. Prioritize the protocol over analysis; do not pile on. Process only; supportive tone."
+  },
+  {
+    "name": "setup-match",
+    "description": "Atomic Gate 2: decide whether the chart is a clean instance of one of the user's 1\u20132 mastered, pre- defined setups. Use this skill WHENEVER the user wants to classify or validate a pattern \u2014 \"is this my setup\", \"classify this chart\", \"does this match my pattern\", or \"which setup is this\". Returns MATCH or NO-MATCH; an unfamiliar or messy chart is a NO-GO because a measurable edge needs a repeatable pattern. Process only."
+  },
+  {
+    "name": "state-check",
+    "description": "Atomic Gate 4: confirm the conditions for rule-based execution are intact before entry. Use this skill WHENEVER the user signals a possible impulse trade or asks if they should act on a feeling \u2014 \"am I okay to trade\", \"I feel like chasing\", \"I want to make it back\", \"should I take this impulse\", or \"I am tempted to size up\". The presence of an urge to deviate is itself the disqualifier. Returns GO or NO-GO. If the user is in active drawdown/tilt, defer to risk-deescalation. Process only."
+  },
+  {
+    "name": "trade-discipline",
+    "description": "Top-level router and sequencer for a logical, rules-based momentum / small-cap day-trading discipline system, composed of atomic single-purpose sub-skills. Use this skill WHENEVER the user wants to run a full trading workflow rather than a single step \u2014 e.g. \"run my trading day\", \"should I take this trade?\", \"walk me through this setup\", \"help me trade with discipline\", or \"set up my whole process\". It decides which atomic skill to invoke and in what order, and enforces that ALL pre-trade gates pass before any entry. For a single isolated step (just sizing, just journaling, just a drawdown reset) defer to the matching atomic skill directly. Process only; never recommends buys/sells or predicts prices."
+  },
+  {
+    "name": "trade-journal",
+    "description": "Atomic post-trade logging and same-day review. Use this skill WHENEVER the user wants to record or review trades \u2014 \"log this trade\", \"journal\", \"review my day\", or \"track my trades\". It logs not just P&L but RULE ADHERENCE (followed_plan, rule_breaks), using assets/trade_journal_template.csv, and sums the day in R to keep ego out. Tracking deviations, not just wins, is what turns discipline into data. Process only."
+  },
+  {
+    "name": "trade-planner",
+    "description": "Atomic Gate 3: build the full pre-trade plan and run the risk math. Use this skill WHENEVER the user wants to plan or size a trade \u2014 \"plan this trade\", \"size this\", \"what is my position size\", \"what is the R:R\", or \"where do I put my stop\". It requires entry, an invalidation/stop at a PRIOR structural level (not the breakout), and target(s) BEFORE entry, then runs scripts/position_sizer.py to compute size, reward:risk, and the daily max loss, returning GO only if R:R is at least 2. Process only; no buy/sell calls."
+  },
+  {
+    "name": "trade-screen",
+    "description": "Atomic Gate 1: a five-filter screen that decides whether a stock is the right KIND to trade. Use this skill WHENEVER the user wants to vet or find a name \u2014 \"screen this stock\", \"does X qualify\", \"is this tradeable\", \"find me names\", or \"run the filters\". It returns CANDIDATE or REJECT and is a FILTER, never a recommendation; surfacing names that pass is fine, telling the user to buy is not. Process only; no price predictions."
+  },
+  {
+    "name": "weekly-audit",
+    "description": "Atomic weekly statistics and scaling decision. Use this skill WHENEVER the user reviews a week or asks about sizing up \u2014 \"review my week\", \"should I size up\", \"what is my expectancy\", or \"are my stats good enough to scale\". It computes win%, avg win/loss (R), expectancy, profit concentration, and rule-break rate via scripts/position_sizer.py (expectancy --journal), then gives a scale-up / hold / scale-down verdict. Size is earned by evidence. Process only."
+  }
+]

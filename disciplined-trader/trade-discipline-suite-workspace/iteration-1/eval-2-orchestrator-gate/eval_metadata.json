@@ -1,0 +1,31 @@
+{
+  "eval_id": 2,
+  "eval_name": "orchestrator-gate",
+  "prompt": "Should I take this trade? GENI is up 18% premarket on an FDA approval, float about 8M, relative volume looks like 6x, price $5.40. It's forming a bull flag near the highs. My account is $8,000 \u2014 I'd enter the breakout at $5.50, stop at $5.20, target $6.40. Walk me through whether to take it.",
+  "assertions": [
+    {
+      "name": "all_five_gates_run",
+      "text": "Runs all five gates explicitly and in order (trade-screen, setup-match, trade-planner, state-check, cost-check)."
+    },
+    {
+      "name": "g1_thresholds_applied",
+      "text": "Applies concrete G1 thresholds (price ~$1-20, float <10M/<20M, rvol >=5x, catalyst, already moving) to the GENI facts rather than vague approval."
+    },
+    {
+      "name": "g3_sizer_and_rr",
+      "text": "For G3, runs/uses the sizer and reports R:R 3.0 (reward $0.90 / risk $0.30) with a computed share size."
+    },
+    {
+      "name": "per_gate_verdicts",
+      "text": "States a GO/NO-GO (or CANDIDATE/MATCH) verdict for each gate."
+    },
+    {
+      "name": "all_go_enforced",
+      "text": "Makes clear no entry happens unless all gates are GO (enforces the hard rule)."
+    },
+    {
+      "name": "process_not_advice",
+      "text": "Frames the output as process/discipline, not a naked buy/sell recommendation or price prediction."
+    }
+  ]
+}

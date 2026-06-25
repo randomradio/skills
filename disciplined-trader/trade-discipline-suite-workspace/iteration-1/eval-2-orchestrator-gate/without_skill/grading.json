@@ -1,0 +1,46 @@
+{
+  "expectations": [
+    {
+      "text": "Runs all five gates explicitly and in order (trade-screen, setup-match, trade-planner, state-check, cost-check).",
+      "passed": false,
+      "evidence": "No five-gate structure \u2014 narrative sections."
+    },
+    {
+      "text": "Applies concrete G1 thresholds (price ~$1-20, float <10M/<20M, rvol >=5x, catalyst, already moving) to the GENI facts rather than vague approval.",
+      "passed": false,
+      "evidence": "Float/rvol/catalyst as context/risks, not a screen with pass/fail thresholds."
+    },
+    {
+      "text": "For G3, runs/uses the sizer and reports R:R 3.0 (reward $0.90 / risk $0.30) with a computed share size.",
+      "passed": true,
+      "evidence": "R:R 3.0 and 267 shares at 1%."
+    },
+    {
+      "text": "States a GO/NO-GO (or CANDIDATE/MATCH) verdict for each gate.",
+      "passed": false,
+      "evidence": "Single overall verdict, no per-gate verdicts."
+    },
+    {
+      "text": "Makes clear no entry happens unless all gates are GO (enforces the hard rule).",
+      "passed": false,
+      "evidence": "No all-gates-GO chain enforcement."
+    },
+    {
+      "text": "Frames the output as process/discipline, not a naked buy/sell recommendation or price prediction.",
+      "passed": true,
+      "evidence": "Explicit 'not financial advice' framing."
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "failed": 4,
+    "total": 6,
+    "pass_rate": 0.3333
+  },
+  "timing": {
+    "total_duration_seconds": 70.5
+  },
+  "execution_metrics": {
+    "total_tool_calls": 3
+  }
+}

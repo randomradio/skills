@@ -1,0 +1,17 @@
+
+=== TRADE PLAN ===
+Side                 : long
+Account              : $8,000.00
+Risk per trade       : 1.00%  ($80.00)
+Entry / Stop / Target: 4.2 / 3.95 / 4.95
+Per-share risk       : $0.25
+Position size        : 320 shares  (~$1,344.00 exposure)
+Reward : Risk        : 3.00 : 1
+Daily max loss (3R)  : $240.00  -> hit this, stop for the day
+
+=== GATE 3 (Plan) VERDICT ===
+R:R 3.00 >= 2.0  OK
+
+>>> GO (plan math passes — still clear Gates 1,2,4,5) <<<
+Reminder: gross math here ignores commissions, borrow/locate, slippage, taxes/FX (Gate 5).
+

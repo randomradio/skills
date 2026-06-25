@@ -1,0 +1,242 @@
+[
+  {
+    "id": 0,
+    "query": "i'm about to buy more SPRT even though it's already ripped like 40% off the open, i kinda just don't want to miss it \u2014 am i good to take this or am i chasing?"
+  },
+  {
+    "id": 1,
+    "query": "honestly tempted to size up to 2k shares on this one because i just KNOW it's going higher today. should i?"
+  },
+  {
+    "id": 2,
+    "query": "i took my planned trade but now i want to add a second position in the same name to make back the slippage. ok to do that?"
+  },
+  {
+    "id": 3,
+    "query": "be real with me \u2014 am i in the right headspace to put this trade on right now? feels a little revenge-y"
+  },
+  {
+    "id": 4,
+    "query": "i can't actually say what my stop is, i just want in before it goes. should i pull the trigger?"
+  },
+  {
+    "id": 5,
+    "query": "thinking about chasing the TKAT breakout here, it's pretty extended past my entry but momentum looks strong. green light?"
+  },
+  {
+    "id": 6,
+    "query": "my gut says go bigger than 1% on this setup, conviction is really high. is that ok just this once?"
+  },
+  {
+    "id": 7,
+    "query": "am i clear to trade right now or am i forcing it? i keep wanting to click buy on stuff that isn't even on my watchlist"
+  },
+  {
+    "id": 8,
+    "query": "about to break my own rule and enter without a catalyst because the chart looks juicy. trade or no?"
+  },
+  {
+    "id": 9,
+    "query": "i want to enter even though price already blew past my 4.20 trigger and it's at 4.55 \u2014 should i just market in before it runs more?"
+  },
+  {
+    "id": 10,
+    "query": "i've lost 4 trades in a row and i'm on full tilt, can't stop clicking, already blew through my daily max loss"
+  },
+  {
+    "id": 11,
+    "query": "brutal red day, down 3R and i think i'm spiraling. what do i do to stop the bleeding?"
+  },
+  {
+    "id": 12,
+    "query": "walk me through my entire trading day from premarket prep all the way to close"
+  },
+  {
+    "id": 13,
+    "query": "size this for me: account 10k, risk 1%, entry 6.10, stop 5.90, target 6.80 \u2014 what's my share count and R:R?"
+  },
+  {
+    "id": 14,
+    "query": "log today's trades into my journal and tell me my total R for the day"
+  },
+  {
+    "id": 15,
+    "query": "is the market even moving today? worth trading the small-cap momentum or should i just sit out?"
+  },
+  {
+    "id": 16,
+    "query": "does HUDI qualify as a candidate \u2014 float about 6M, up 22%, rvol like 8x, has a dilution headline"
+  },
+  {
+    "id": 17,
+    "query": "review my week and tell me whether my stats are good enough to scale up my size"
+  },
+  {
+    "id": 18,
+    "query": "i'm already in this position and it's going against me \u2014 do i hold to my stop or cut it now?"
+  },
+  {
+    "id": 19,
+    "query": "i've been really anxious about money lately and can't focus at work, feeling pretty stressed about everything"
+  },
+  {
+    "id": 20,
+    "query": "i've lost 5 in a row, down like 6R today and i literally cannot stop clicking buy"
+  },
+  {
+    "id": 21,
+    "query": "blew through my daily max loss an hour ago and kept trading, today's a disaster"
+  },
+  {
+    "id": 22,
+    "query": "two red days back to back and i feel like i'm tilting hard, what do i do"
+  },
+  {
+    "id": 23,
+    "query": "i'm revenge trading and i know it, just trying to claw back what i lost this morning"
+  },
+  {
+    "id": 24,
+    "query": "i broke three of my rules this session and i'm rattled, should i even keep going?"
+  },
+  {
+    "id": 25,
+    "query": "down bad, account's bleeding, i think i need to stop but i can't"
+  },
+  {
+    "id": 26,
+    "query": "i'm on full tilt after that big loss, talk me off the ledge"
+  },
+  {
+    "id": 27,
+    "query": "i keep forcing trades to make back the red and it's spiraling"
+  },
+  {
+    "id": 28,
+    "query": "rough morning, gave back all my gains plus more \u2014 how do i reset"
+  },
+  {
+    "id": 29,
+    "query": "i hit my circuit breaker / max loss for the day, what's the protocol from here"
+  },
+  {
+    "id": 30,
+    "query": "i'm tempted to chase this breakout that's already extended past my entry, am i good to take it?"
+  },
+  {
+    "id": 31,
+    "query": "thinking of sizing up on conviction this one time before i enter, ok?"
+  },
+  {
+    "id": 32,
+    "query": "run my full trading day for me start to finish"
+  },
+  {
+    "id": 33,
+    "query": "review my week \u2014 given my stats should i scale my size down a notch?"
+  },
+  {
+    "id": 34,
+    "query": "set my risk budget and daily max loss for today before i start trading"
+  },
+  {
+    "id": 35,
+    "query": "log my losing trade and note the rule i broke on it"
+  },
+  {
+    "id": 36,
+    "query": "i'm in a position that's underwater right now, do i cut it at my stop or hold?"
+  },
+  {
+    "id": 37,
+    "query": "market's choppy and dead today, should i even bother trading?"
+  },
+  {
+    "id": 38,
+    "query": "size a trade for me with a tighter stop since i want to risk less"
+  },
+  {
+    "id": 39,
+    "query": "i lost money in the market last year, any general tips for the taxes on that?"
+  },
+  {
+    "id": 40,
+    "query": "should i take this trade? GENI, FDA catalyst, 8M float, here's my entry/stop/target \u2014 walk me through whether to enter"
+  },
+  {
+    "id": 41,
+    "query": "run my whole trading process on this setup, from the screen all the way to costs"
+  },
+  {
+    "id": 42,
+    "query": "help me trade with discipline today \u2014 the full routine"
+  },
+  {
+    "id": 43,
+    "query": "i want to evaluate this candidate through all my gates before i enter"
+  },
+  {
+    "id": 44,
+    "query": "set up my entire process and tell me if this one's a go"
+  },
+  {
+    "id": 45,
+    "query": "walk me through everything \u2014 is XYZ worth entering given all my rules?"
+  },
+  {
+    "id": 46,
+    "query": "take me from premarket through to the entry decision on this name"
+  },
+  {
+    "id": 47,
+    "query": "i found a runner, vet it end to end against my system"
+  },
+  {
+    "id": 48,
+    "query": "be my full trading checklist for this trade \u2014 all the gates in order"
+  },
+  {
+    "id": 49,
+    "query": "manage my whole day: prep, regime, and whether to pull the trigger on this one"
+  },
+  {
+    "id": 50,
+    "query": "just size this: 5k account, entry 4.00, stop 3.80, target 4.60"
+  },
+  {
+    "id": 51,
+    "query": "i'm on tilt and losing, just reset me"
+  },
+  {
+    "id": 52,
+    "query": "just tell me if i'm okay to take this impulse entry right now"
+  },
+  {
+    "id": 53,
+    "query": "just log today's trades into my journal"
+  },
+  {
+    "id": 54,
+    "query": "just review my week's expectancy for me"
+  },
+  {
+    "id": 55,
+    "query": "just screen this ticker \u2014 does it qualify as a candidate?"
+  },
+  {
+    "id": 56,
+    "query": "just tell me if this chart is a clean instance of my bull-flag setup"
+  },
+  {
+    "id": 57,
+    "query": "just tell me whether the market's even worth trading today"
+  },
+  {
+    "id": 58,
+    "query": "just check whether this thin edge survives fees and borrow"
+  },
+  {
+    "id": 59,
+    "query": "i'm already in the position, just tell me when to take profit"
+  }
+]

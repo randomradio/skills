@@ -1,0 +1,23 @@
+[
+  {"query": "i'm about to buy more SPRT even though it's already ripped like 40% off the open, i kinda just don't want to miss it — am i good to take this or am i chasing?", "should_trigger": true},
+  {"query": "honestly tempted to size up to 2k shares on this one because i just KNOW it's going higher today. should i?", "should_trigger": true},
+  {"query": "i took my planned trade but now i want to add a second position in the same name to make back the slippage. ok to do that?", "should_trigger": true},
+  {"query": "be real with me — am i in the right headspace to put this trade on right now? feels a little revenge-y", "should_trigger": true},
+  {"query": "i can't actually say what my stop is, i just want in before it goes. should i pull the trigger?", "should_trigger": true},
+  {"query": "thinking about chasing the TKAT breakout here, it's pretty extended past my entry but momentum looks strong. green light?", "should_trigger": true},
+  {"query": "my gut says go bigger than 1% on this setup, conviction is really high. is that ok just this once?", "should_trigger": true},
+  {"query": "am i clear to trade right now or am i forcing it? i keep wanting to click buy on stuff that isn't even on my watchlist", "should_trigger": true},
+  {"query": "about to break my own rule and enter without a catalyst because the chart looks juicy. trade or no?", "should_trigger": true},
+  {"query": "i want to enter even though price already blew past my 4.20 trigger and it's at 4.55 — should i just market in before it runs more?", "should_trigger": true},
+
+  {"query": "i've lost 4 trades in a row and i'm on full tilt, can't stop clicking, already blew through my daily max loss", "should_trigger": false},
+  {"query": "brutal red day, down 3R and i think i'm spiraling. what do i do to stop the bleeding?", "should_trigger": false},
+  {"query": "walk me through my entire trading day from premarket prep all the way to close", "should_trigger": false},
+  {"query": "size this for me: account 10k, risk 1%, entry 6.10, stop 5.90, target 6.80 — what's my share count and R:R?", "should_trigger": false},
+  {"query": "log today's trades into my journal and tell me my total R for the day", "should_trigger": false},
+  {"query": "is the market even moving today? worth trading the small-cap momentum or should i just sit out?", "should_trigger": false},
+  {"query": "does HUDI qualify as a candidate — float about 6M, up 22%, rvol like 8x, has a dilution headline", "should_trigger": false},
+  {"query": "review my week and tell me whether my stats are good enough to scale up my size", "should_trigger": false},
+  {"query": "i'm already in this position and it's going against me — do i hold to my stop or cut it now?", "should_trigger": false},
+  {"query": "i've been really anxious about money lately and can't focus at work, feeling pretty stressed about everything", "should_trigger": false}
+]

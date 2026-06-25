@@ -1,0 +1,46 @@
+{
+  "expectations": [
+    {
+      "text": "Ran position_sizer.py expectancy --journal on the provided CSV (output shows the JOURNAL EXPECTANCY block or states it executed the script).",
+      "passed": true,
+      "evidence": "script_output.txt shows '=== JOURNAL EXPECTANCY ===' run on the CSV."
+    },
+    {
+      "text": "Reports a positive per-trade expectancy of roughly +0.34R.",
+      "passed": true,
+      "evidence": "Expectancy +0.345R (positive)."
+    },
+    {
+      "text": "Reports profit concentration (top-3 winners ~84% of gross profit) and flags it as fragile / concentrated.",
+      "passed": true,
+      "evidence": "'Profit concentration: top 3 winners = 84% of gross profit', flagged fragile."
+    },
+    {
+      "text": "Reports the rule-break rate (~18%, 4 of 22 trades).",
+      "passed": true,
+      "evidence": "Rule-break rate 18% (4 of 22)."
+    },
+    {
+      "text": "Verdict is HOLD or do-NOT-scale-up (not an aggressive scale-up), justified by concentration and/or rule-break rate and borderline sample.",
+      "passed": true,
+      "evidence": "Verdict 'HOLD. Do not size up yet.'"
+    },
+    {
+      "text": "Notes the sample-size caveat (~20-30 trades min) and/or that R must be net of costs.",
+      "passed": true,
+      "evidence": "Sample-size caveat (>=~20-30) AND net-of-costs caveat."
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_duration_seconds": 67.6
+  },
+  "execution_metrics": {
+    "total_tool_calls": 6
+  }
+}

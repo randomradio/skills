@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "Ran the bundled position_sizer.py rather than hand-computing the numbers (output shows the script's TRADE PLAN block or states it executed the script).",
+      "passed": true,
+      "evidence": "script_output.txt shows '=== TRADE PLAN ===' \u2014 sizer actually run."
+    },
+    {
+      "text": "Reports reward:risk of 3.0 : 1 (reward $0.75 / risk $0.25).",
+      "passed": true,
+      "evidence": "Reward:Risk 3.00:1 (0.75/0.25)."
+    },
+    {
+      "text": "Reports a position size of 320 shares (risk $80 at 1% of $8,000 / $0.25 per-share risk).",
+      "passed": true,
+      "evidence": "320 shares at 1% ($80)/$0.25."
+    },
+    {
+      "text": "States the 3R daily max loss of $240.",
+      "passed": true,
+      "evidence": "'Daily max loss (3R) $240.00 \u2014 hit this, stop trading for the day'."
+    },
+    {
+      "text": "Gives an explicit GO verdict for the plan (R:R >= 2), noting it still must clear the other gates.",
+      "passed": true,
+      "evidence": "'Verdict: GO (plan math passes)', still must clear other gates."
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_duration_seconds": 47.9
+  },
+  "execution_metrics": {
+    "total_tool_calls": 5
+  }
+}

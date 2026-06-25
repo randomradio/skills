@@ -1,0 +1,31 @@
+{
+  "eval_id": 1,
+  "eval_name": "weekly-scale",
+  "prompt": "Here's my trading journal for the last couple weeks: trade-discipline-suite-workspace/iteration-1/inputs/my_trading_week.csv . Review my week and tell me whether I should size up.",
+  "assertions": [
+    {
+      "name": "used_expectancy_script",
+      "text": "Ran position_sizer.py expectancy --journal on the provided CSV (output shows the JOURNAL EXPECTANCY block or states it executed the script)."
+    },
+    {
+      "name": "expectancy_positive_reported",
+      "text": "Reports a positive per-trade expectancy of roughly +0.34R."
+    },
+    {
+      "name": "concentration_reported",
+      "text": "Reports profit concentration (top-3 winners ~84% of gross profit) and flags it as fragile / concentrated."
+    },
+    {
+      "name": "rule_break_rate_reported",
+      "text": "Reports the rule-break rate (~18%, 4 of 22 trades)."
+    },
+    {
+      "name": "verdict_not_scale_up",
+      "text": "Verdict is HOLD or do-NOT-scale-up (not an aggressive scale-up), justified by concentration and/or rule-break rate and borderline sample."
+    },
+    {
+      "name": "caveat_sample_or_costs",
+      "text": "Notes the sample-size caveat (~20-30 trades min) and/or that R must be net of costs."
+    }
+  ]
+}

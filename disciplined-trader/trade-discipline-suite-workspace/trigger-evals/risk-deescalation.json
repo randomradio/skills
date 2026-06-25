@@ -1,0 +1,23 @@
+[
+  {"query": "i've lost 5 in a row, down like 6R today and i literally cannot stop clicking buy", "should_trigger": true},
+  {"query": "blew through my daily max loss an hour ago and kept trading, today's a disaster", "should_trigger": true},
+  {"query": "two red days back to back and i feel like i'm tilting hard, what do i do", "should_trigger": true},
+  {"query": "i'm revenge trading and i know it, just trying to claw back what i lost this morning", "should_trigger": true},
+  {"query": "i broke three of my rules this session and i'm rattled, should i even keep going?", "should_trigger": true},
+  {"query": "down bad, account's bleeding, i think i need to stop but i can't", "should_trigger": true},
+  {"query": "i'm on full tilt after that big loss, talk me off the ledge", "should_trigger": true},
+  {"query": "i keep forcing trades to make back the red and it's spiraling", "should_trigger": true},
+  {"query": "rough morning, gave back all my gains plus more — how do i reset", "should_trigger": true},
+  {"query": "i hit my circuit breaker / max loss for the day, what's the protocol from here", "should_trigger": true},
+
+  {"query": "i'm tempted to chase this breakout that's already extended past my entry, am i good to take it?", "should_trigger": false},
+  {"query": "thinking of sizing up on conviction this one time before i enter, ok?", "should_trigger": false},
+  {"query": "run my full trading day for me start to finish", "should_trigger": false},
+  {"query": "review my week — given my stats should i scale my size down a notch?", "should_trigger": false},
+  {"query": "set my risk budget and daily max loss for today before i start trading", "should_trigger": false},
+  {"query": "log my losing trade and note the rule i broke on it", "should_trigger": false},
+  {"query": "i'm in a position that's underwater right now, do i cut it at my stop or hold?", "should_trigger": false},
+  {"query": "market's choppy and dead today, should i even bother trading?", "should_trigger": false},
+  {"query": "size a trade for me with a tighter stop since i want to risk less", "should_trigger": false},
+  {"query": "i lost money in the market last year, any general tips for the taxes on that?", "should_trigger": false}
+]

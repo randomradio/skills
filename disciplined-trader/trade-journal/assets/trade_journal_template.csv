@@ -1,0 +1,4 @@
+date,ticker,direction,setup,catalyst,price_ok,float_ok,rvol_ok,catalyst_ok,already_moving,gate1_pass,gate2_setup_match,entry,stop,target,shares,planned_R,realized_R,pnl_usd,followed_plan,rule_breaks,deviation_signal,notes
+2026-01-05,EXMPL,long,gap-and-go,FDA approval,Y,Y,Y,Y,Y,Y,Y,4.00,3.80,4.50,250,2.5,2.1,105.00,Y,,none,"Took 1/2 at 4.45, stop to b/e, trailed rest. Clean execution."
+2026-01-05,EXMP2,short,short-into-spike,dilution offering,Y,Y,Y,Y,Y,Y,Y,6.20,6.45,5.60,80,2.4,-1.0,-20.00,Y,,none,"Stopped at level. Small loss, no widening. Good discipline."
+2026-01-06,BADTR,long,none,no catalyst,Y,N,N,N,Y,N,N,2.10,1.95,2.40,300,2.0,-1.5,-67.50,N,traded-without-catalyst;oversized,urge-to-chase,"RULE BREAK: chased a name that failed Gate 1 and Gate 3. Prevent: no trade without a catalyst and a written plan."

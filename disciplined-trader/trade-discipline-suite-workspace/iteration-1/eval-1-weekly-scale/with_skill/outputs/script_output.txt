@@ -1,0 +1,14 @@
+
+=== JOURNAL EXPECTANCY ===
+Sample (with realized_R) : 22 trades
+Rule-breaks logged       : 4  (18% of sample)
+Profit concentration     : top 3 winners = 84% of gross profit (R) [3 of 10 winning trades]
+  ^ High: the edge leans on a few trades — treat expectancy as fragile, do not scale.
+Win rate                 : 45.5%
+Avg win  (R)             : 1.90
+Avg loss (R)             : 0.95
+Payoff (avg win/avg loss): 2.00
+Expectancy per trade (R) : +0.345
+>>> POSITIVE expectancy (net of costs?). Edge looks real on this sample — scale size only per the Weekly Audit rules.
+Note: confirm these R values are NET of commissions, borrow, slippage, taxes/FX.
+

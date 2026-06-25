@@ -1,0 +1,302 @@
+[
+  {
+    "id": 0,
+    "target_skill": "state-check",
+    "should_trigger": true
+  },
+  {
+    "id": 1,
+    "target_skill": "state-check",
+    "should_trigger": true
+  },
+  {
+    "id": 2,
+    "target_skill": "state-check",
+    "should_trigger": true
+  },
+  {
+    "id": 3,
+    "target_skill": "state-check",
+    "should_trigger": true
+  },
+  {
+    "id": 4,
+    "target_skill": "state-check",
+    "should_trigger": true
+  },
+  {
+    "id": 5,
+    "target_skill": "state-check",
+    "should_trigger": true
+  },
+  {
+    "id": 6,
+    "target_skill": "state-check",
+    "should_trigger": true
+  },
+  {
+    "id": 7,
+    "target_skill": "state-check",
+    "should_trigger": true
+  },
+  {
+    "id": 8,
+    "target_skill": "state-check",
+    "should_trigger": true
+  },
+  {
+    "id": 9,
+    "target_skill": "state-check",
+    "should_trigger": true
+  },
+  {
+    "id": 10,
+    "target_skill": "state-check",
+    "should_trigger": false
+  },
+  {
+    "id": 11,
+    "target_skill": "state-check",
+    "should_trigger": false
+  },
+  {
+    "id": 12,
+    "target_skill": "state-check",
+    "should_trigger": false
+  },
+  {
+    "id": 13,
+    "target_skill": "state-check",
+    "should_trigger": false
+  },
+  {
+    "id": 14,
+    "target_skill": "state-check",
+    "should_trigger": false
+  },
+  {
+    "id": 15,
+    "target_skill": "state-check",
+    "should_trigger": false
+  },
+  {
+    "id": 16,
+    "target_skill": "state-check",
+    "should_trigger": false
+  },
+  {
+    "id": 17,
+    "target_skill": "state-check",
+    "should_trigger": false
+  },
+  {
+    "id": 18,
+    "target_skill": "state-check",
+    "should_trigger": false
+  },
+  {
+    "id": 19,
+    "target_skill": "state-check",
+    "should_trigger": false
+  },
+  {
+    "id": 20,
+    "target_skill": "risk-deescalation",
+    "should_trigger": true
+  },
+  {
+    "id": 21,
+    "target_skill": "risk-deescalation",
+    "should_trigger": true
+  },
+  {
+    "id": 22,
+    "target_skill": "risk-deescalation",
+    "should_trigger": true
+  },
+  {
+    "id": 23,
+    "target_skill": "risk-deescalation",
+    "should_trigger": true
+  },
+  {
+    "id": 24,
+    "target_skill": "risk-deescalation",
+    "should_trigger": true
+  },
+  {
+    "id": 25,
+    "target_skill": "risk-deescalation",
+    "should_trigger": true
+  },
+  {
+    "id": 26,
+    "target_skill": "risk-deescalation",
+    "should_trigger": true
+  },
+  {
+    "id": 27,
+    "target_skill": "risk-deescalation",
+    "should_trigger": true
+  },
+  {
+    "id": 28,
+    "target_skill": "risk-deescalation",
+    "should_trigger": true
+  },
+  {
+    "id": 29,
+    "target_skill": "risk-deescalation",
+    "should_trigger": true
+  },
+  {
+    "id": 30,
+    "target_skill": "risk-deescalation",
+    "should_trigger": false
+  },
+  {
+    "id": 31,
+    "target_skill": "risk-deescalation",
+    "should_trigger": false
+  },
+  {
+    "id": 32,
+    "target_skill": "risk-deescalation",
+    "should_trigger": false
+  },
+  {
+    "id": 33,
+    "target_skill": "risk-deescalation",
+    "should_trigger": false
+  },
+  {
+    "id": 34,
+    "target_skill": "risk-deescalation",
+    "should_trigger": false
+  },
+  {
+    "id": 35,
+    "target_skill": "risk-deescalation",
+    "should_trigger": false
+  },
+  {
+    "id": 36,
+    "target_skill": "risk-deescalation",
+    "should_trigger": false
+  },
+  {
+    "id": 37,
+    "target_skill": "risk-deescalation",
+    "should_trigger": false
+  },
+  {
+    "id": 38,
+    "target_skill": "risk-deescalation",
+    "should_trigger": false
+  },
+  {
+    "id": 39,
+    "target_skill": "risk-deescalation",
+    "should_trigger": false
+  },
+  {
+    "id": 40,
+    "target_skill": "trade-discipline",
+    "should_trigger": true
+  },
+  {
+    "id": 41,
+    "target_skill": "trade-discipline",
+    "should_trigger": true
+  },
+  {
+    "id": 42,
+    "target_skill": "trade-discipline",
+    "should_trigger": true
+  },
+  {
+    "id": 43,
+    "target_skill": "trade-discipline",
+    "should_trigger": true
+  },
+  {
+    "id": 44,
+    "target_skill": "trade-discipline",
+    "should_trigger": true
+  },
+  {
+    "id": 45,
+    "target_skill": "trade-discipline",
+    "should_trigger": true
+  },
+  {
+    "id": 46,
+    "target_skill": "trade-discipline",
+    "should_trigger": true
+  },
+  {
+    "id": 47,
+    "target_skill": "trade-discipline",
+    "should_trigger": true
+  },
+  {
+    "id": 48,
+    "target_skill": "trade-discipline",
+    "should_trigger": true
+  },
+  {
+    "id": 49,
+    "target_skill": "trade-discipline",
+    "should_trigger": true
+  },
+  {
+    "id": 50,
+    "target_skill": "trade-discipline",
+    "should_trigger": false
+  },
+  {
+    "id": 51,
+    "target_skill": "trade-discipline",
+    "should_trigger": false
+  },
+  {
+    "id": 52,
+    "target_skill": "trade-discipline",
+    "should_trigger": false
+  },
+  {
+    "id": 53,
+    "target_skill": "trade-discipline",
+    "should_trigger": false
+  },
+  {
+    "id": 54,
+    "target_skill": "trade-discipline",
+    "should_trigger": false
+  },
+  {
+    "id": 55,
+    "target_skill": "trade-discipline",
+    "should_trigger": false
+  },
+  {
+    "id": 56,
+    "target_skill": "trade-discipline",
+    "should_trigger": false
+  },
+  {
+    "id": 57,
+    "target_skill": "trade-discipline",
+    "should_trigger": false
+  },
+  {
+    "id": 58,
+    "target_skill": "trade-discipline",
+    "should_trigger": false
+  },
+  {
+    "id": 59,
+    "target_skill": "trade-discipline",
+    "should_trigger": false
+  }
+]

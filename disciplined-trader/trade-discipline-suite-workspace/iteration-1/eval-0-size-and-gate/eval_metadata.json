@@ -1,0 +1,27 @@
+{
+  "eval_id": 0,
+  "eval_name": "size-and-gate",
+  "prompt": "I'm looking at a long on a small-cap that's running. My account is $8,000. I want to enter at $4.20, put my stop at $3.95 (that was the prior support that held), and target $4.95. Plan this trade and tell me whether it's a go.",
+  "assertions": [
+    {
+      "name": "used_sizer_script",
+      "text": "Ran the bundled position_sizer.py rather than hand-computing the numbers (output shows the script's TRADE PLAN block or states it executed the script)."
+    },
+    {
+      "name": "correct_rr_3to1",
+      "text": "Reports reward:risk of 3.0 : 1 (reward $0.75 / risk $0.25)."
+    },
+    {
+      "name": "correct_size_320",
+      "text": "Reports a position size of 320 shares (risk $80 at 1% of $8,000 / $0.25 per-share risk)."
+    },
+    {
+      "name": "daily_max_loss_stated",
+      "text": "States the 3R daily max loss of $240."
+    },
+    {
+      "name": "explicit_go_verdict",
+      "text": "Gives an explicit GO verdict for the plan (R:R >= 2), noting it still must clear the other gates."
+    }
+  ]
+}

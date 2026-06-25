@@ -1,0 +1,349 @@
+{
+  "metadata": {
+    "skill_name": "trade-discipline-suite",
+    "timestamp": "2026-06-22",
+    "evals_run": [
+      0,
+      1,
+      2
+    ],
+    "runs_per_configuration": 1,
+    "baseline": "without_skill",
+    "executor_model": "claude-opus-4-8"
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "eval_name": "size-and-gate",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 47.9,
+        "tokens": 32943,
+        "tool_calls": 5,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Ran the bundled position_sizer.py rather than hand-computing the numbers (output shows the script's TRADE PLAN block or states it executed the script).",
+          "passed": true,
+          "evidence": "script_output.txt shows '=== TRADE PLAN ===' \u2014 sizer actually run."
+        },
+        {
+          "text": "Reports reward:risk of 3.0 : 1 (reward $0.75 / risk $0.25).",
+          "passed": true,
+          "evidence": "Reward:Risk 3.00:1 (0.75/0.25)."
+        },
+        {
+          "text": "Reports a position size of 320 shares (risk $80 at 1% of $8,000 / $0.25 per-share risk).",
+          "passed": true,
+          "evidence": "320 shares at 1% ($80)/$0.25."
+        },
+        {
+          "text": "States the 3R daily max loss of $240.",
+          "passed": true,
+          "evidence": "'Daily max loss (3R) $240.00 \u2014 hit this, stop trading for the day'."
+        },
+        {
+          "text": "Gives an explicit GO verdict for the plan (R:R >= 2), noting it still must clear the other gates.",
+          "passed": true,
+          "evidence": "'Verdict: GO (plan math passes)', still must clear other gates."
+        }
+      ]
+    },
+    {
+      "eval_id": 0,
+      "eval_name": "size-and-gate",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.6,
+        "passed": 3,
+        "failed": 2,
+        "total": 5,
+        "time_seconds": 36.7,
+        "tokens": 27114,
+        "tool_calls": 2,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Ran the bundled position_sizer.py rather than hand-computing the numbers (output shows the script's TRADE PLAN block or states it executed the script).",
+          "passed": false,
+          "evidence": "No skill/script \u2014 numbers hand-derived in prose."
+        },
+        {
+          "text": "Reports reward:risk of 3.0 : 1 (reward $0.75 / risk $0.25).",
+          "passed": true,
+          "evidence": "Reward-to-risk 3.0:1 correct."
+        },
+        {
+          "text": "Reports a position size of 320 shares (risk $80 at 1% of $8,000 / $0.25 per-share risk).",
+          "passed": true,
+          "evidence": "320 shares at 1% recommended."
+        },
+        {
+          "text": "States the 3R daily max loss of $240.",
+          "passed": false,
+          "evidence": "Frames $240 as profit at target, not a 3R daily max-loss stop."
+        },
+        {
+          "text": "Gives an explicit GO verdict for the plan (R:R >= 2), noting it still must clear the other gates.",
+          "passed": true,
+          "evidence": "'Verdict: Conditional GO'."
+        }
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "weekly-scale",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 67.6,
+        "tokens": 34739,
+        "tool_calls": 6,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Ran position_sizer.py expectancy --journal on the provided CSV (output shows the JOURNAL EXPECTANCY block or states it executed the script).",
+          "passed": true,
+          "evidence": "script_output.txt shows '=== JOURNAL EXPECTANCY ===' run on the CSV."
+        },
+        {
+          "text": "Reports a positive per-trade expectancy of roughly +0.34R.",
+          "passed": true,
+          "evidence": "Expectancy +0.345R (positive)."
+        },
+        {
+          "text": "Reports profit concentration (top-3 winners ~84% of gross profit) and flags it as fragile / concentrated.",
+          "passed": true,
+          "evidence": "'Profit concentration: top 3 winners = 84% of gross profit', flagged fragile."
+        },
+        {
+          "text": "Reports the rule-break rate (~18%, 4 of 22 trades).",
+          "passed": true,
+          "evidence": "Rule-break rate 18% (4 of 22)."
+        },
+        {
+          "text": "Verdict is HOLD or do-NOT-scale-up (not an aggressive scale-up), justified by concentration and/or rule-break rate and borderline sample.",
+          "passed": true,
+          "evidence": "Verdict 'HOLD. Do not size up yet.'"
+        },
+        {
+          "text": "Notes the sample-size caveat (~20-30 trades min) and/or that R must be net of costs.",
+          "passed": true,
+          "evidence": "Sample-size caveat (>=~20-30) AND net-of-costs caveat."
+        }
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "weekly-scale",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 3,
+        "failed": 3,
+        "total": 6,
+        "time_seconds": 66.8,
+        "tokens": 30693,
+        "tool_calls": 5,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Ran position_sizer.py expectancy --journal on the provided CSV (output shows the JOURNAL EXPECTANCY block or states it executed the script).",
+          "passed": false,
+          "evidence": "No skill/script \u2014 own profit-factor/R-split by hand."
+        },
+        {
+          "text": "Reports a positive per-trade expectancy of roughly +0.34R.",
+          "passed": true,
+          "evidence": "+0.35R avg / positive expectancy."
+        },
+        {
+          "text": "Reports profit concentration (top-3 winners ~84% of gross profit) and flags it as fragile / concentrated.",
+          "passed": false,
+          "evidence": "No top-3 concentration metric (used profit factor + first/second-half split)."
+        },
+        {
+          "text": "Reports the rule-break rate (~18%, 4 of 22 trades).",
+          "passed": true,
+          "evidence": "4 of 22 = 18% rule-break rate."
+        },
+        {
+          "text": "Verdict is HOLD or do-NOT-scale-up (not an aggressive scale-up), justified by concentration and/or rule-break rate and borderline sample.",
+          "passed": true,
+          "evidence": "Verdict 'No. Not yet. Hold current size.'"
+        },
+        {
+          "text": "Notes the sample-size caveat (~20-30 trades min) and/or that R must be net of costs.",
+          "passed": false,
+          "evidence": "No net-of-costs caveat, no explicit sample-size minimum."
+        }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "orchestrator-gate",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 87.6,
+        "tokens": 31951,
+        "tool_calls": 4,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Runs all five gates explicitly and in order (trade-screen, setup-match, trade-planner, state-check, cost-check).",
+          "passed": true,
+          "evidence": "Runs G1..G5 explicitly, in order, with headers."
+        },
+        {
+          "text": "Applies concrete G1 thresholds (price ~$1-20, float <10M/<20M, rvol >=5x, catalyst, already moving) to the GENI facts rather than vague approval.",
+          "passed": true,
+          "evidence": "G1 applies price $1-20, float <10M prime, rvol >=5x, catalyst, +18% as pass/fail."
+        },
+        {
+          "text": "For G3, runs/uses the sizer and reports R:R 3.0 (reward $0.90 / risk $0.30) with a computed share size.",
+          "passed": true,
+          "evidence": "G3 computes R:R 3.0 (0.90/0.30), 266 shares, $80 risk."
+        },
+        {
+          "text": "States a GO/NO-GO (or CANDIDATE/MATCH) verdict for each gate.",
+          "passed": true,
+          "evidence": "Per-gate verdicts + summary table."
+        },
+        {
+          "text": "Makes clear no entry happens unless all gates are GO (enforces the hard rule).",
+          "passed": true,
+          "evidence": "'all five must be GO to enter', 'chain halts at Gate 3'."
+        },
+        {
+          "text": "Frames the output as process/discipline, not a naked buy/sell recommendation or price prediction.",
+          "passed": true,
+          "evidence": "Process-only framing; no buy/sell call."
+        }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "orchestrator-gate",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.3333,
+        "passed": 2,
+        "failed": 4,
+        "total": 6,
+        "time_seconds": 70.5,
+        "tokens": 28547,
+        "tool_calls": 3,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Runs all five gates explicitly and in order (trade-screen, setup-match, trade-planner, state-check, cost-check).",
+          "passed": false,
+          "evidence": "No five-gate structure \u2014 narrative sections."
+        },
+        {
+          "text": "Applies concrete G1 thresholds (price ~$1-20, float <10M/<20M, rvol >=5x, catalyst, already moving) to the GENI facts rather than vague approval.",
+          "passed": false,
+          "evidence": "Float/rvol/catalyst as context/risks, not a screen with pass/fail thresholds."
+        },
+        {
+          "text": "For G3, runs/uses the sizer and reports R:R 3.0 (reward $0.90 / risk $0.30) with a computed share size.",
+          "passed": true,
+          "evidence": "R:R 3.0 and 267 shares at 1%."
+        },
+        {
+          "text": "States a GO/NO-GO (or CANDIDATE/MATCH) verdict for each gate.",
+          "passed": false,
+          "evidence": "Single overall verdict, no per-gate verdicts."
+        },
+        {
+          "text": "Makes clear no entry happens unless all gates are GO (enforces the hard rule).",
+          "passed": false,
+          "evidence": "No all-gates-GO chain enforcement."
+        },
+        {
+          "text": "Frames the output as process/discipline, not a naked buy/sell recommendation or price prediction.",
+          "passed": true,
+          "evidence": "Explicit 'not financial advice' framing."
+        }
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 67.7,
+        "stddev": 19.8502,
+        "min": 47.9,
+        "max": 87.6
+      },
+      "tokens": {
+        "mean": 33211.0,
+        "stddev": 1413.1893,
+        "min": 31951.0,
+        "max": 34739.0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.4778,
+        "stddev": 0.1347,
+        "min": 0.3333,
+        "max": 0.6
+      },
+      "time_seconds": {
+        "mean": 58.0,
+        "stddev": 18.5389,
+        "min": 36.7,
+        "max": 70.5
+      },
+      "tokens": {
+        "mean": 28784.6667,
+        "stddev": 1801.298,
+        "min": 27114.0,
+        "max": 30693.0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.52",
+      "time_seconds": "+9.7",
+      "tokens": "+4426"
+    }
+  },
+  "notes": [
+    "Single run per configuration: pass-rate deltas are directional, not statistically robust. Re-run 3x for stable stats.",
+    "Non-discriminating assertions (pass in BOTH configs): reward:risk, share size, scale-up verdict, expectancy sign, rule-break rate, process-not-advice. A capable model reproduces these unaided.",
+    "Discriminating assertions (the skill's real value-add): ran the bundled script (reproducible math vs hand-calc), the profit-concentration metric (newly added output), the explicit five-gate chain + per-gate verdicts + all-GO enforcement, and the 3R daily-max-loss framing.",
+    "eval-2 with_skill ran ALL FIVE gates from the orchestrator's inline thresholds with NO atom skills installed \u2014 validates the Phase B self-sufficiency fix.",
+    "eval-1 with_skill: the new concentration line (top-3 = 84% of gross profit) tipped a positive-expectancy week to HOLD \u2014 the metric does real work.",
+    "Cost: skill adds pass-rate for ~+10s/run and ~+4.4k tokens, mostly script execution + the structured gate walk."
+  ]
+}

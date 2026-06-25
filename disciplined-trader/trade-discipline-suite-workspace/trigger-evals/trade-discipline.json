@@ -1,0 +1,23 @@
+[
+  {"query": "should i take this trade? GENI, FDA catalyst, 8M float, here's my entry/stop/target — walk me through whether to enter", "should_trigger": true},
+  {"query": "run my whole trading process on this setup, from the screen all the way to costs", "should_trigger": true},
+  {"query": "help me trade with discipline today — the full routine", "should_trigger": true},
+  {"query": "i want to evaluate this candidate through all my gates before i enter", "should_trigger": true},
+  {"query": "set up my entire process and tell me if this one's a go", "should_trigger": true},
+  {"query": "walk me through everything — is XYZ worth entering given all my rules?", "should_trigger": true},
+  {"query": "take me from premarket through to the entry decision on this name", "should_trigger": true},
+  {"query": "i found a runner, vet it end to end against my system", "should_trigger": true},
+  {"query": "be my full trading checklist for this trade — all the gates in order", "should_trigger": true},
+  {"query": "manage my whole day: prep, regime, and whether to pull the trigger on this one", "should_trigger": true},
+
+  {"query": "just size this: 5k account, entry 4.00, stop 3.80, target 4.60", "should_trigger": false},
+  {"query": "i'm on tilt and losing, just reset me", "should_trigger": false},
+  {"query": "just tell me if i'm okay to take this impulse entry right now", "should_trigger": false},
+  {"query": "just log today's trades into my journal", "should_trigger": false},
+  {"query": "just review my week's expectancy for me", "should_trigger": false},
+  {"query": "just screen this ticker — does it qualify as a candidate?", "should_trigger": false},
+  {"query": "just tell me if this chart is a clean instance of my bull-flag setup", "should_trigger": false},
+  {"query": "just tell me whether the market's even worth trading today", "should_trigger": false},
+  {"query": "just check whether this thin edge survives fees and borrow", "should_trigger": false},
+  {"query": "i'm already in the position, just tell me when to take profit", "should_trigger": false}
+]

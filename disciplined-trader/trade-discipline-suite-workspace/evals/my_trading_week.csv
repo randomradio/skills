@@ -1,0 +1,23 @@
+date,ticker,direction,setup,catalyst,price_ok,float_ok,rvol_ok,catalyst_ok,already_moving,gate1_pass,gate2_setup_match,entry,stop,target,shares,planned_R,realized_R,pnl_usd,followed_plan,rule_breaks,deviation_signal,notes
+2026-02-04,T00,long,gap-and-go,earnings beat,Y,Y,Y,Y,Y,Y,Y,4.0,3.8,4.4,100,2.0,-1.0,-50.0,Y,,none,clean
+2026-02-04,T01,long,bull-flag breakout,FDA approval,Y,Y,Y,Y,Y,Y,Y,4.5,4.3,4.9,100,2.0,7.0,350.0,Y,,none,clean
+2026-02-04,T02,short,short-into-spike,dilution offering,Y,Y,Y,Y,Y,Y,Y,5.0,5.2,4.6,100,2.0,-1.0,-50.0,Y,,none,clean
+2026-02-05,T03,long,vwap reclaim,contract win,Y,Y,Y,Y,Y,Y,Y,5.5,5.3,5.9,100,2.0,-1.0,-50.0,N,oversized,urge-to-make-it-back,RULE BREAK
+2026-02-05,T04,long,gap-and-go,sector momentum,Y,Y,Y,Y,Y,Y,Y,6.0,5.8,6.4,100,2.0,5.0,250.0,Y,,none,clean
+2026-02-05,T05,long,bull-flag breakout,earnings beat,Y,Y,Y,Y,Y,Y,Y,4.0,3.8,4.4,100,2.0,-1.0,-50.0,Y,,none,clean
+2026-02-06,T06,short,short-into-spike,FDA approval,Y,Y,Y,Y,Y,Y,Y,4.5,4.7,4.1,100,2.0,-1.0,-50.0,Y,,none,clean
+2026-02-06,T07,long,vwap reclaim,dilution offering,Y,Y,Y,Y,Y,Y,Y,5.0,4.8,5.4,100,2.0,4.0,200.0,Y,,none,clean
+2026-02-06,T08,long,gap-and-go,contract win,Y,Y,Y,Y,Y,Y,Y,5.5,5.3,5.9,100,2.0,-1.0,-50.0,Y,,none,clean
+2026-02-07,T09,long,bull-flag breakout,sector momentum,Y,Y,Y,Y,Y,Y,Y,6.0,5.8,6.4,100,2.0,-1.0,-50.0,N,chased-extended,urge-to-make-it-back,RULE BREAK
+2026-02-07,T10,short,short-into-spike,earnings beat,Y,Y,Y,Y,Y,Y,Y,4.0,4.2,3.6,100,2.0,0.8,40.0,Y,,none,clean
+2026-02-07,T11,long,vwap reclaim,FDA approval,Y,Y,Y,Y,Y,Y,Y,4.5,4.3,4.9,100,2.0,-1.0,-50.0,Y,,none,clean
+2026-02-08,T12,long,gap-and-go,dilution offering,Y,Y,Y,Y,Y,Y,Y,5.0,4.8,5.4,100,2.0,-1.0,-50.0,Y,,none,clean
+2026-02-08,T13,long,bull-flag breakout,contract win,Y,Y,Y,Y,Y,Y,Y,5.5,5.3,5.9,100,2.0,0.6,30.0,Y,,none,clean
+2026-02-08,T14,short,short-into-spike,sector momentum,Y,Y,Y,Y,Y,Y,Y,6.0,6.2,5.6,100,2.0,-1.2,-60.0,N,moved-stop,urge-to-make-it-back,RULE BREAK
+2026-02-09,T15,long,vwap reclaim,earnings beat,Y,Y,Y,Y,Y,Y,Y,4.0,3.8,4.4,100,2.0,-0.6,-30.0,Y,,none,clean
+2026-02-09,T16,long,gap-and-go,FDA approval,Y,Y,Y,Y,Y,Y,Y,4.5,4.3,4.9,100,2.0,0.5,25.0,Y,,none,clean
+2026-02-09,T17,long,bull-flag breakout,dilution offering,Y,Y,Y,Y,Y,Y,Y,5.0,4.8,5.4,100,2.0,-0.6,-30.0,Y,,none,clean
+2026-02-10,T18,short,short-into-spike,contract win,Y,Y,Y,Y,Y,Y,Y,5.5,5.7,5.1,100,2.0,0.4,20.0,Y,,none,clean
+2026-02-10,T19,long,vwap reclaim,sector momentum,Y,Y,Y,Y,Y,Y,Y,6.0,5.8,6.4,100,2.0,0.3,15.0,N,no-catalyst,urge-to-make-it-back,RULE BREAK
+2026-02-10,T20,long,gap-and-go,earnings beat,Y,Y,Y,Y,Y,Y,Y,4.0,3.8,4.4,100,2.0,0.2,10.0,Y,,none,clean
+2026-02-11,T21,long,bull-flag breakout,FDA approval,Y,Y,Y,Y,Y,Y,Y,4.5,4.3,4.9,100,2.0,0.2,10.0,Y,,none,clean
