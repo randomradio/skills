@@ -34,6 +34,11 @@ node site/scripts/build-registry.mjs
 cd site && python3 -m http.server 4173
 ```
 
+GitHub Actions validates the install/update scripts, checks that
+`site/registry.json` is current, and deploys `site/` to GitHub Pages on pushes
+to `master`. Configure the repository Pages source as **GitHub Actions** and set
+the custom domain to `skills.icyzhao.com`.
+
 ## Workflow
 
 ```

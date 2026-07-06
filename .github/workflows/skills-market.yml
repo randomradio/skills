@@ -1,0 +1,112 @@
+name: Skills Market
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/skills-market.yml"
+      - "install.sh"
+      - "plugins/randomradio/**"
+      - "randomradio-upgrade/**"
+      - "site/**"
+      - "README.md"
+  push:
+    branches:
+      - master
+    paths:
+      - ".github/workflows/skills-market.yml"
+      - "install.sh"
+      - "plugins/randomradio/**"
+      - "randomradio-upgrade/**"
+      - "site/**"
+      - "README.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: skills-market-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate skills and market
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Validate install and upgrade scripts
+        run: |
+          bash -n install.sh
+          bash -n randomradio-upgrade/scripts/install_skill.sh
+          bash -n randomradio-upgrade/scripts/upgrade_skills.sh
+          bash randomradio-upgrade/scripts/validate.sh
+
+      - name: Build skills registry
+        run: node site/scripts/build-registry.mjs
+
+      - name: Check generated registry is committed
+        run: |
+          if ! git diff --exit-code -- site/registry.json; then
+            echo "::error file=site/registry.json::site/registry.json is out of date. Run node site/scripts/build-registry.mjs and commit the result."
+            exit 1
+          fi
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check site/app.js
+          node --check site/scripts/build-registry.mjs
+
+      - name: Check publishable site files
+        run: |
+          test -f site/index.html
+          test -f site/styles.css
+          test -f site/app.js
+          test -f site/registry.json
+
+  deploy:
+    name: Deploy skills.icyzhao.com
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: validate
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      actions: read
+
+    environment:
+      name: github-pages
+      url: https://skills.icyzhao.com/
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Build skills registry
+        run: node site/scripts/build-registry.mjs
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
