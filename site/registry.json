@@ -5,10 +5,11 @@
   "repository": "https://github.com/randomradio/skills",
   "collection": {
     "name": "randomradio",
-    "version": "1.5.1",
+    "version": "1.6.0",
     "description": "Goal-driven development tools with structured planning, review, and autonomous execution.",
     "skillCount": 20,
-    "agentCount": 27
+    "agentCount": 27,
+    "upstreamTrackedCount": 13
   },
   "commands": {
     "installAll": "curl -fsSL https://raw.githubusercontent.com/randomradio/skills/master/install.sh | bash -s -- --target all",
@@ -23,12 +24,19 @@
       "title": "Brainstorm",
       "category": "Workflow",
       "description": "Explore requirements and design before planning. Use when starting new features, investigating what to build, or when scope is unclear. Collaborative dialogue to answer WHAT to build before HOW.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": false,
       "path": "plugins/randomradio/skills/brainstorm/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/brainstorm/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/brainstorm/SKILL.md",
+      "upstream": {
+        "mode": "fork",
+        "provider": "compound-engineering",
+        "providerName": "Compound Engineering",
+        "upstreamSkill": "ce-brainstorm",
+        "updatePolicy": "prefer-upstream-with-local-contracts"
+      }
     },
     {
       "id": "compound",
@@ -36,12 +44,19 @@
       "title": "Compound",
       "category": "Knowledge",
       "description": "Document a recently solved problem to compound your team's knowledge. Use after debugging sessions, bug fixes, workflow discoveries, architecture decisions, or when the user says 'that worked', 'it's fixed', or 'document this'.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": false,
       "path": "plugins/randomradio/skills/compound/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/compound/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/compound/SKILL.md",
+      "upstream": {
+        "mode": "fork",
+        "provider": "compound-engineering",
+        "providerName": "Compound Engineering",
+        "upstreamSkill": "ce-compound",
+        "updatePolicy": "prefer-upstream-with-local-contracts"
+      }
     },
     {
       "id": "compound-refresh",
@@ -49,12 +64,19 @@
       "title": "Compound Refresh",
       "category": "Knowledge",
       "description": "Maintain quality of docs/solutions/ knowledge base over time. Reviews existing learnings against the current codebase, classifies as Keep/Update/Consolidate/Replace/Delete. Use periodically or when docs feel stale.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": false,
       "path": "plugins/randomradio/skills/compound-refresh/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/compound-refresh/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/compound-refresh/SKILL.md",
+      "upstream": {
+        "mode": "fork",
+        "provider": "compound-engineering",
+        "providerName": "Compound Engineering",
+        "upstreamSkill": "ce-compound-refresh",
+        "updatePolicy": "prefer-upstream-with-local-contracts"
+      }
     },
     {
       "id": "debug",
@@ -62,12 +84,19 @@
       "title": "Debug",
       "category": "Quality",
       "description": "Systematically find root causes and fix bugs. Use when debugging errors, investigating test failures, reproducing bugs, or when stuck after failed fix attempts. Also use when the user says 'debug this', 'why is this failing', 'fix this bug', or pastes stack traces or error messages.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": true,
       "path": "plugins/randomradio/skills/debug/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/debug/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/debug/SKILL.md",
+      "upstream": {
+        "mode": "fork",
+        "provider": "compound-engineering",
+        "providerName": "Compound Engineering",
+        "upstreamSkill": "ce-debug",
+        "updatePolicy": "prefer-upstream-with-local-contracts"
+      }
     },
     {
       "id": "document-review",
@@ -75,12 +104,19 @@
       "title": "Document Review",
       "category": "Quality",
       "description": "Review requirements, specs, or plan documents through multi-persona analysis. Use when a document needs quality review before implementation. Supports headless mode for automated pipelines.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": false,
       "path": "plugins/randomradio/skills/document-review/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/document-review/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/document-review/SKILL.md",
+      "upstream": {
+        "mode": "fork",
+        "provider": "compound-engineering",
+        "providerName": "Compound Engineering",
+        "upstreamSkill": "ce-doc-review",
+        "updatePolicy": "prefer-upstream-with-local-contracts"
+      }
     },
     {
       "id": "git-commit",
@@ -88,12 +124,19 @@
       "title": "Git Commit",
       "category": "Git",
       "description": "Create well-crafted git commits following repository conventions. Auto-detects commit style from history and project docs. Considers logical commit splitting. Use when committing changes without creating a PR.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": false,
       "path": "plugins/randomradio/skills/git-commit/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/git-commit/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/git-commit/SKILL.md",
+      "upstream": {
+        "mode": "fork",
+        "provider": "compound-engineering",
+        "providerName": "Compound Engineering",
+        "upstreamSkill": "ce-commit",
+        "updatePolicy": "prefer-upstream-with-local-contracts"
+      }
     },
     {
       "id": "git-commit-push-pr",
@@ -101,12 +144,19 @@
       "title": "Git Commit Push PR",
       "category": "Git",
       "description": "Go from working tree changes to an open PR in one step. Smart commit splitting, adaptive PR descriptions, and convention detection. Also supports updating existing PR descriptions.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": false,
       "path": "plugins/randomradio/skills/git-commit-push-pr/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/git-commit-push-pr/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/git-commit-push-pr/SKILL.md",
+      "upstream": {
+        "mode": "fork",
+        "provider": "compound-engineering",
+        "providerName": "Compound Engineering",
+        "upstreamSkill": "ce-commit-push-pr",
+        "updatePolicy": "prefer-upstream-with-local-contracts"
+      }
     },
     {
       "id": "git-worktree",
@@ -114,12 +164,19 @@
       "title": "Git Worktree",
       "category": "Git",
       "description": "Manage Git worktrees for isolated parallel development. Create, list, switch, and clean up worktrees. Auto-copies .env files and handles branch safety.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": false,
       "path": "plugins/randomradio/skills/git-worktree/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/git-worktree/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/git-worktree/SKILL.md",
+      "upstream": {
+        "mode": "fork",
+        "provider": "compound-engineering",
+        "providerName": "Compound Engineering",
+        "upstreamSkill": "ce-worktree",
+        "updatePolicy": "prefer-upstream-with-local-contracts"
+      }
     },
     {
       "id": "ideate",
@@ -127,12 +184,19 @@
       "title": "Ideate",
       "category": "Workflow",
       "description": "Generate and critically evaluate project improvement ideas grounded in the actual codebase. Use before brainstorming to explore what could be improved. Precedes rr:brainstorm in the workflow.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": false,
       "path": "plugins/randomradio/skills/ideate/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/ideate/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/ideate/SKILL.md",
+      "upstream": {
+        "mode": "fork",
+        "provider": "compound-engineering",
+        "providerName": "Compound Engineering",
+        "upstreamSkill": "ce-ideate",
+        "updatePolicy": "prefer-upstream-with-local-contracts"
+      }
     },
     {
       "id": "plan",
@@ -140,12 +204,19 @@
       "title": "Plan",
       "category": "Workflow",
       "description": "Create structured implementation plans for multi-step tasks. Use when you have requirements or a spec and need to plan the implementation before coding. Produces a durable plan document with bite-sized TDD tasks.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": true,
       "path": "plugins/randomradio/skills/plan/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/plan/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/plan/SKILL.md",
+      "upstream": {
+        "mode": "fork",
+        "provider": "compound-engineering",
+        "providerName": "Compound Engineering",
+        "upstreamSkill": "ce-plan",
+        "updatePolicy": "prefer-upstream-with-local-contracts"
+      }
     },
     {
       "id": "plantuml-qpr-render",
@@ -163,7 +234,14 @@
       ],
       "featured": true,
       "path": "plugins/randomradio/skills/plantuml-qpr-render/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/plantuml-qpr-render/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/plantuml-qpr-render/SKILL.md",
+      "upstream": {
+        "mode": "original",
+        "provider": null,
+        "providerName": null,
+        "upstreamSkill": null,
+        "updatePolicy": "repo-owned"
+      }
     },
     {
       "id": "quick-shoutout",
@@ -171,12 +249,19 @@
       "title": "Quick Shoutout",
       "category": "Deployment",
       "description": "Standardize and automate low-friction publishing of app repositories to latentvibe.com on Cloudflare using shell-only workflows. Use when creating or updating deployment workflows for API-only apps, agent-skill catalogs, fullstack apps (frontend + backend), and staging/dev environments with Cloudflare Tunnel.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": true,
       "path": "plugins/randomradio/skills/quick-shoutout/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/quick-shoutout/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/quick-shoutout/SKILL.md",
+      "upstream": {
+        "mode": "original",
+        "provider": null,
+        "providerName": null,
+        "upstreamSkill": null,
+        "updatePolicy": "repo-owned"
+      }
     },
     {
       "id": "resolve-pr-feedback",
@@ -184,12 +269,19 @@
       "title": "Resolve PR Feedback",
       "category": "Git",
       "description": "Evaluate and fix PR review feedback, then reply and resolve threads. Use when a PR has review comments to address. Supports full mode (all threads) and targeted mode (single thread URL).",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": false,
       "path": "plugins/randomradio/skills/resolve-pr-feedback/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/resolve-pr-feedback/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/resolve-pr-feedback/SKILL.md",
+      "upstream": {
+        "mode": "fork",
+        "provider": "compound-engineering",
+        "providerName": "Compound Engineering",
+        "upstreamSkill": "ce-resolve-pr-feedback",
+        "updatePolicy": "prefer-upstream-with-local-contracts"
+      }
     },
     {
       "id": "review",
@@ -197,12 +289,19 @@
       "title": "Review",
       "category": "Quality",
       "description": "Structured code review using calibrated reviewer personas, P0-P3 severity, action routing, report-only/headless safeguards, and stable findings. Use before merging, after substantial changes, or when requesting code review.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": true,
       "path": "plugins/randomradio/skills/review/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/review/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/review/SKILL.md",
+      "upstream": {
+        "mode": "fork",
+        "provider": "compound-engineering",
+        "providerName": "Compound Engineering",
+        "upstreamSkill": "ce-code-review",
+        "updatePolicy": "prefer-upstream-with-local-contracts"
+      }
     },
     {
       "id": "skills-market-publish",
@@ -210,12 +309,19 @@
       "title": "Skills Market Publish",
       "category": "Deployment",
       "description": "Publish and maintain a skills marketplace from this repository using the committed skills registry, GitHub Actions, GitHub Pages, and Cloudflare DNS. Triggers: \"publish the skills market\", \"setup skills.icyzhao.com\", \"deploy the skill catalog\", \"automate skill updates\", \"add GitHub Pages CI\", \"set up Cloudflare DNS for skills\", \"turn these skills into a marketplace\", \"merge and push skills release\", \"non-breaking skill update\", \"showcase my skills\".",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "versionScope": "skill",
       "tags": [],
       "featured": true,
       "path": "plugins/randomradio/skills/skills-market-publish/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/skills-market-publish/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/skills-market-publish/SKILL.md",
+      "upstream": {
+        "mode": "original",
+        "provider": null,
+        "providerName": null,
+        "upstreamSkill": null,
+        "updatePolicy": "repo-owned"
+      }
     },
     {
       "id": "tdd",
@@ -223,12 +329,19 @@
       "title": "TDD",
       "category": "Quality",
       "description": "Use when implementing any feature or bugfix, before writing implementation code. Enforces test-first red-green-refactor discipline.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": false,
       "path": "plugins/randomradio/skills/tdd/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/tdd/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/tdd/SKILL.md",
+      "upstream": {
+        "mode": "original",
+        "provider": null,
+        "providerName": null,
+        "upstreamSkill": null,
+        "updatePolicy": "repo-owned"
+      }
     },
     {
       "id": "todo-create",
@@ -236,12 +349,19 @@
       "title": "Todo Create",
       "category": "Productivity",
       "description": "Create file-based todos tracked in .context/todos/. Each todo is a markdown file with YAML frontmatter, sequential IDs, status, priority, and dependencies. Use when tracking work items that persist across sessions.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": false,
       "path": "plugins/randomradio/skills/todo-create/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/todo-create/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/todo-create/SKILL.md",
+      "upstream": {
+        "mode": "original",
+        "provider": null,
+        "providerName": null,
+        "upstreamSkill": null,
+        "updatePolicy": "repo-owned"
+      }
     },
     {
       "id": "todo-resolve",
@@ -249,12 +369,19 @@
       "title": "Todo Resolve",
       "category": "Productivity",
       "description": "Batch-resolve approved (ready) todos using parallel agents. Implements fixes, commits, and marks todos as complete. Use after rr:todo-triage has approved items.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": false,
       "path": "plugins/randomradio/skills/todo-resolve/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/todo-resolve/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/todo-resolve/SKILL.md",
+      "upstream": {
+        "mode": "original",
+        "provider": null,
+        "providerName": null,
+        "upstreamSkill": null,
+        "updatePolicy": "repo-owned"
+      }
     },
     {
       "id": "todo-triage",
@@ -262,12 +389,19 @@
       "title": "Todo Triage",
       "category": "Productivity",
       "description": "Interactive review of pending todos for approval, skip, or modification. Lightweight triage workflow before batch resolution with rr:todo-resolve.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": false,
       "path": "plugins/randomradio/skills/todo-triage/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/todo-triage/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/todo-triage/SKILL.md",
+      "upstream": {
+        "mode": "original",
+        "provider": null,
+        "providerName": null,
+        "upstreamSkill": null,
+        "updatePolicy": "repo-owned"
+      }
     },
     {
       "id": "work",
@@ -275,12 +409,19 @@
       "title": "Work",
       "category": "Workflow",
       "description": "Execute development work using a goal-driven loop with verifiable criteria. Use when implementing features, fixing bugs, executing plans, or any task with testable success criteria. Defaults to inline/task-list execution; delegation is optional when the platform and user intent allow it.",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "versionScope": "collection",
       "tags": [],
       "featured": true,
       "path": "plugins/randomradio/skills/work/SKILL.md",
-      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/work/SKILL.md"
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/work/SKILL.md",
+      "upstream": {
+        "mode": "fork",
+        "provider": "compound-engineering",
+        "providerName": "Compound Engineering",
+        "upstreamSkill": "ce-work",
+        "updatePolicy": "prefer-upstream-with-local-contracts"
+      }
     }
   ]
 }

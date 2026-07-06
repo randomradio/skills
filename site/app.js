@@ -100,6 +100,9 @@ function filteredSkills() {
         skill.title,
         skill.category,
         skill.description,
+        skill.upstream?.mode,
+        skill.upstream?.providerName,
+        skill.upstream?.upstreamSkill,
         ...(skill.tags || []),
       ]
         .join(" ")
@@ -135,6 +138,7 @@ function renderSkills() {
       metaPill(skill.name),
       metaPill(`v${skill.version}`),
       metaPill(skill.versionScope),
+      metaPill(upstreamLabel(skill.upstream)),
     );
 
     const copyButton = card.querySelector(".copy-id");
@@ -154,6 +158,11 @@ function metaPill(text) {
   const span = document.createElement("span");
   span.textContent = text;
   return span;
+}
+
+function upstreamLabel(upstream) {
+  if (!upstream?.upstreamSkill) return "repo-owned";
+  return `${upstream.providerName || upstream.provider}: ${upstream.mode}`;
 }
 
 function copyCommand(key, button) {

@@ -8,7 +8,7 @@ description: >
   Cloudflare DNS for skills", "turn these skills into a marketplace", "merge
   and push skills release", "non-breaking skill update", "showcase my skills".
 argument-hint: "[domain, release branch, or brief publish request]"
-version: 1.0.1
+version: 1.1.0
 ---
 
 # Skills Market Publish
@@ -29,6 +29,7 @@ git remote -v
 git branch --show-current
 (node --version && echo NODE_OK) 2>/dev/null || echo NODE_MISSING
 (bash -n install.sh && bash -n randomradio-upgrade/scripts/upgrade_skills.sh && echo SHELL_OK) 2>/dev/null || echo SHELL_CHECK_FAILED
+(node scripts/compare-upstream-skills.mjs --check --allow-missing-upstream && echo UPSTREAM_MAP_OK) 2>/dev/null || echo UPSTREAM_MAP_MISSING_OR_INVALID
 (gh --version && gh auth status && echo GH_AUTH_OK) 2>/dev/null || echo GH_UNAVAILABLE_OR_UNAUTHENTICATED
 (dig +time=3 +tries=1 +short CNAME skills.icyzhao.com && echo DIG_OK) 2>/dev/null || echo DIG_UNAVAILABLE_OR_NO_RECORD
 (curl -fsS --max-time 10 'https://dns.google/resolve?name=skills.icyzhao.com&type=CNAME' >/dev/null && echo DOH_OK) 2>/dev/null || echo DOH_UNAVAILABLE
@@ -46,6 +47,8 @@ git branch --show-current
    `references/pages-cloudflare-setup.md` and stop before claiming setup is done.
 5. If `dig` fails but `DOH_OK` works -> trust DNS-over-HTTPS for public DNS
    verification and note local resolver limitations.
+6. If `UPSTREAM_MAP_OK` -> use `plugins/randomradio/skills/upstream.json` before
+   changing existing skills; otherwise add or repair the mapping first.
 
 ## Step 2: Resolve Publish Defaults
 
@@ -57,6 +60,7 @@ git branch --show-current
 | `dns_target` | `<github-owner>.github.io` | GitHub Pages custom-domain target |
 | `site_dir` | `site/` | Static market output directory |
 | `registry_command` | `node site/scripts/build-registry.mjs` | Repo-local catalog generator |
+| `upstream_manifest` | `plugins/randomradio/skills/upstream.json` | Tracks CE lineage and local ownership |
 | `pages_source` | GitHub Actions | Matches `.github/workflows/skills-market.yml` |
 | `dns_proxy` | Proxied | Production HTTPS is served by Cloudflare edge |
 | `push_policy` | Push only after explicit publish/merge request | Avoid accidental releases |
@@ -69,18 +73,30 @@ repo files or the user request, ask one concise question.
 
 1. Add or modify skill files under `plugins/randomradio/skills/<skill-id>/`.
 2. Keep frontmatter `name` as `rr:<skill-id>`.
-3. Update `README.md` and `.claude-plugin/marketplace.json` skill counts when the
+3. If the skill is derived from Compound Engineering, add or update its entry in
+   `plugins/randomradio/skills/upstream.json` before editing the skill body.
+4. For existing `fork` skills, run the upstream comparison when upstream skills
+   are installed locally:
+
+```bash
+node scripts/compare-upstream-skills.mjs
+```
+
+5. Adopt upstream improvements by default when they are non-breaking, but keep
+   RandomRadio local contracts: `rr:` names, install/update behavior, registry
+   metadata, and deliberate workflow simplifications.
+6. Update `README.md` and `.claude-plugin/marketplace.json` skill counts when the
    public collection changes.
-4. Bump `plugins/randomradio/.claude-plugin/plugin.json` with a non-breaking
+7. Bump `plugins/randomradio/.claude-plugin/plugin.json` with a non-breaking
    semver increment for additive skills.
-5. Run the registry generator:
+8. Run the registry generator:
 
 ```bash
 node site/scripts/build-registry.mjs
 ```
 
-Exit gate: `site/registry.json` must include every published skill and must not
-be hand-edited except for emergency recovery.
+Exit gate: `site/registry.json` must include every published skill, including
+its upstream lineage, and must not be hand-edited except for emergency recovery.
 
 ## Step 4: Verify CI and Static Market
 
@@ -91,6 +107,8 @@ bash -n install.sh
 bash -n randomradio-upgrade/scripts/install_skill.sh
 bash -n randomradio-upgrade/scripts/upgrade_skills.sh
 bash randomradio-upgrade/scripts/validate.sh
+node scripts/compare-upstream-skills.mjs --check --allow-missing-upstream
+node --check scripts/compare-upstream-skills.mjs
 node --check site/app.js
 node --check site/scripts/build-registry.mjs
 git diff --check
@@ -152,8 +170,10 @@ Use this output structure:
 2. **Market status**: skill count, registry update, and deployed site target.
 3. **Hosting status**: GitHub Pages source, custom domain, Cloudflare DNS value,
    and HTTPS/certificate state.
-4. **Verification**: commands run and pass/fail evidence.
-5. **Follow-up**: only unresolved external waits, such as GitHub certificate
+4. **Upstream status**: CE-derived skills touched, manifest mode, and whether
+   upstream comparison was run or skipped because upstream was unavailable.
+5. **Verification**: commands run and pass/fail evidence.
+6. **Follow-up**: only unresolved external waits, such as GitHub certificate
    issuance or DNS propagation.
 
 ## Reference Files

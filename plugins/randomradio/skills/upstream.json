@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "2026-07-06.upstream-skills.v1",
+  "description": "Tracks upstream lineage for published RandomRadio skills. The repo-owned skill remains the source of record; upstream entries are comparison sources for non-breaking updates.",
+  "localContracts": [
+    "Published skill frontmatter names stay under the rr: namespace.",
+    "RandomRadio install, registry, market, and release behavior stay repo-owned.",
+    "Upstream updates are reviewed before adoption; local changes are preserved when they are part of the RandomRadio contract."
+  ],
+  "providers": {
+    "compound-engineering": {
+      "displayName": "Compound Engineering",
+      "skillsRootEnv": "COMPOUND_ENGINEERING_SKILLS_ROOT",
+      "defaultLocalRoot": "~/.codex/skills",
+      "description": "Installed Compound Engineering skills used for comparison and selective refresh."
+    }
+  },
+  "skills": {
+    "brainstorm": {
+      "mode": "fork",
+      "provider": "compound-engineering",
+      "upstreamSkill": "ce-brainstorm",
+      "updatePolicy": "prefer-upstream-with-local-contracts"
+    },
+    "compound": {
+      "mode": "fork",
+      "provider": "compound-engineering",
+      "upstreamSkill": "ce-compound",
+      "updatePolicy": "prefer-upstream-with-local-contracts"
+    },
+    "compound-refresh": {
+      "mode": "fork",
+      "provider": "compound-engineering",
+      "upstreamSkill": "ce-compound-refresh",
+      "updatePolicy": "prefer-upstream-with-local-contracts"
+    },
+    "debug": {
+      "mode": "fork",
+      "provider": "compound-engineering",
+      "upstreamSkill": "ce-debug",
+      "updatePolicy": "prefer-upstream-with-local-contracts"
+    },
+    "document-review": {
+      "mode": "fork",
+      "provider": "compound-engineering",
+      "upstreamSkill": "ce-doc-review",
+      "updatePolicy": "prefer-upstream-with-local-contracts"
+    },
+    "git-commit": {
+      "mode": "fork",
+      "provider": "compound-engineering",
+      "upstreamSkill": "ce-commit",
+      "updatePolicy": "prefer-upstream-with-local-contracts"
+    },
+    "git-commit-push-pr": {
+      "mode": "fork",
+      "provider": "compound-engineering",
+      "upstreamSkill": "ce-commit-push-pr",
+      "updatePolicy": "prefer-upstream-with-local-contracts"
+    },
+    "git-worktree": {
+      "mode": "fork",
+      "provider": "compound-engineering",
+      "upstreamSkill": "ce-worktree",
+      "updatePolicy": "prefer-upstream-with-local-contracts"
+    },
+    "ideate": {
+      "mode": "fork",
+      "provider": "compound-engineering",
+      "upstreamSkill": "ce-ideate",
+      "updatePolicy": "prefer-upstream-with-local-contracts"
+    },
+    "plan": {
+      "mode": "fork",
+      "provider": "compound-engineering",
+      "upstreamSkill": "ce-plan",
+      "updatePolicy": "prefer-upstream-with-local-contracts"
+    },
+    "plantuml-qpr-render": {
+      "mode": "original",
+      "updatePolicy": "repo-owned"
+    },
+    "quick-shoutout": {
+      "mode": "original",
+      "updatePolicy": "repo-owned"
+    },
+    "resolve-pr-feedback": {
+      "mode": "fork",
+      "provider": "compound-engineering",
+      "upstreamSkill": "ce-resolve-pr-feedback",
+      "updatePolicy": "prefer-upstream-with-local-contracts"
+    },
+    "review": {
+      "mode": "fork",
+      "provider": "compound-engineering",
+      "upstreamSkill": "ce-code-review",
+      "updatePolicy": "prefer-upstream-with-local-contracts"
+    },
+    "skills-market-publish": {
+      "mode": "original",
+      "updatePolicy": "repo-owned"
+    },
+    "tdd": {
+      "mode": "original",
+      "updatePolicy": "repo-owned"
+    },
+    "todo-create": {
+      "mode": "original",
+      "updatePolicy": "repo-owned"
+    },
+    "todo-resolve": {
+      "mode": "original",
+      "updatePolicy": "repo-owned"
+    },
+    "todo-triage": {
+      "mode": "original",
+      "updatePolicy": "repo-owned"
+    },
+    "work": {
+      "mode": "fork",
+      "provider": "compound-engineering",
+      "upstreamSkill": "ce-work",
+      "updatePolicy": "prefer-upstream-with-local-contracts"
+    }
+  }
+}

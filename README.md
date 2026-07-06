@@ -40,6 +40,20 @@ GitHub Actions validates the install/update scripts, checks that
 to `master`. Configure the repository Pages source as **GitHub Actions** and set
 the custom domain to `skills.icyzhao.com`.
 
+## Upstream Lineage
+
+Several skills are derived from Compound Engineering. Their upstream mapping is
+tracked in `plugins/randomradio/skills/upstream.json`, and local comparison is
+available with:
+
+```bash
+node scripts/compare-upstream-skills.mjs
+```
+
+RandomRadio remains the source of record for install, update, registry, and
+market behavior; upstream skills are comparison sources for selective
+non-breaking updates.
+
 ## Workflow
 
 ```

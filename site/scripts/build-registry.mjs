@@ -13,6 +13,10 @@ const registryPath = path.join(siteRoot, "registry.json");
 const pluginManifest = JSON.parse(
   fs.readFileSync(path.join(pluginRoot, ".claude-plugin/plugin.json"), "utf8"),
 );
+const upstreamManifestPath = path.join(skillsRoot, "upstream.json");
+const upstreamManifest = fs.existsSync(upstreamManifestPath)
+  ? JSON.parse(fs.readFileSync(upstreamManifestPath, "utf8"))
+  : { providers: {}, skills: {} };
 const existingRegistry = fs.existsSync(registryPath)
   ? JSON.parse(fs.readFileSync(registryPath, "utf8"))
   : {};
@@ -141,6 +145,10 @@ const skills = skillDirs.map((id) => {
   const source = fs.readFileSync(skillPath, "utf8");
   const meta = parseFrontmatter(extractFrontmatter(source, skillPath));
   const description = meta.description || "";
+  const upstreamEntry = upstreamManifest.skills?.[id] || { mode: "original" };
+  const upstreamProvider = upstreamEntry.provider
+    ? upstreamManifest.providers?.[upstreamEntry.provider]
+    : null;
 
   return {
     id,
@@ -154,6 +162,13 @@ const skills = skillDirs.map((id) => {
     featured: featuredIds.has(id),
     path: path.relative(repoRoot, skillPath),
     sourceUrl: `${pluginManifest.repository}/blob/master/${path.relative(repoRoot, skillPath)}`,
+    upstream: {
+      mode: upstreamEntry.mode || "original",
+      provider: upstreamEntry.provider || null,
+      providerName: upstreamProvider?.displayName || null,
+      upstreamSkill: upstreamEntry.upstreamSkill || null,
+      updatePolicy: upstreamEntry.updatePolicy || null,
+    },
   };
 });
 
@@ -171,6 +186,7 @@ const registry = {
     description: pluginManifest.description,
     skillCount: skills.length,
     agentCount: countAgents(),
+    upstreamTrackedCount: skills.filter((skill) => skill.upstream.upstreamSkill).length,
   },
   commands: {
     installAll:

@@ -5,8 +5,10 @@ on:
     paths:
       - ".github/workflows/skills-market.yml"
       - "install.sh"
+      - "docs/upstream/**"
       - "plugins/randomradio/**"
       - "randomradio-upgrade/**"
+      - "scripts/**"
       - "site/**"
       - "README.md"
   push:
@@ -15,8 +17,10 @@ on:
     paths:
       - ".github/workflows/skills-market.yml"
       - "install.sh"
+      - "docs/upstream/**"
       - "plugins/randomradio/**"
       - "randomradio-upgrade/**"
+      - "scripts/**"
       - "site/**"
       - "README.md"
   workflow_dispatch:
@@ -52,6 +56,9 @@ jobs:
       - name: Build skills registry
         run: node site/scripts/build-registry.mjs
 
+      - name: Validate upstream provenance
+        run: node scripts/compare-upstream-skills.mjs --check --allow-missing-upstream
+
       - name: Check generated registry is committed
         run: |
           if ! git diff --exit-code -- site/registry.json; then
@@ -61,6 +68,7 @@ jobs:
 
       - name: Check JavaScript syntax
         run: |
+          node --check scripts/compare-upstream-skills.mjs
           node --check site/app.js
           node --check site/scripts/build-registry.mjs
 
