@@ -8,7 +8,7 @@ description: >
   Cloudflare DNS for skills", "turn these skills into a marketplace", "merge
   and push skills release", "non-breaking skill update", "showcase my skills".
 argument-hint: "[domain, release branch, or brief publish request]"
-version: 1.0.0
+version: 1.0.1
 ---
 
 # Skills Market Publish
@@ -58,7 +58,7 @@ git branch --show-current
 | `site_dir` | `site/` | Static market output directory |
 | `registry_command` | `node site/scripts/build-registry.mjs` | Repo-local catalog generator |
 | `pages_source` | GitHub Actions | Matches `.github/workflows/skills-market.yml` |
-| `dns_proxy` | DNS only | Required for clean GitHub Pages domain validation |
+| `dns_proxy` | Proxied | Production HTTPS is served by Cloudflare edge |
 | `push_policy` | Push only after explicit publish/merge request | Avoid accidental releases |
 
 Exit gate: identify the release branch, domain, and DNS target before changing
@@ -135,11 +135,14 @@ Required target state:
 | GitHub Pages source | GitHub Actions |
 | GitHub Pages custom domain | `skills.icyzhao.com` |
 | Cloudflare DNS record | `CNAME skills -> randomradio.github.io` |
-| Cloudflare proxy | DNS only |
-| HTTPS enforcement | Enable after GitHub issues the certificate |
+| Cloudflare proxy | Proxied |
+| Cloudflare SSL/TLS mode | Full |
+| HTTPS enforcement | Cloudflare redirects HTTP to HTTPS |
 
-Exit gate: DNS-over-HTTPS must return the expected CNAME. GitHub HTTPS may stay
-pending while certificate issuance completes; report it as pending, not failed.
+Exit gate: `https://skills.icyzhao.com/` must return a successful response and
+`http://skills.icyzhao.com/` must redirect to HTTPS. GitHub native HTTPS may
+remain pending when the Cloudflare record is proxied; report that as a GitHub UI
+state, not as a public-site failure.
 
 ## Step 7: Respond to the User
 

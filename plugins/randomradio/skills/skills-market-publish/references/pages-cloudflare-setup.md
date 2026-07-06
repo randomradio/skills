@@ -12,8 +12,9 @@ Use this reference for the one-time hosting setup or repair path for
 | Site artifact | `site/` uploaded by `.github/workflows/skills-market.yml` |
 | Custom domain | `skills.icyzhao.com` |
 | DNS record | `CNAME skills -> randomradio.github.io` |
-| Cloudflare proxy | DNS only |
-| HTTPS | Enabled after GitHub certificate issuance |
+| Cloudflare proxy | Proxied |
+| Cloudflare SSL/TLS mode | Full |
+| HTTPS | Cloudflare edge HTTPS, with HTTP redirected to HTTPS |
 
 ## GitHub Pages Setup
 
@@ -22,8 +23,9 @@ Use this reference for the one-time hosting setup or repair path for
 3. In **Custom domain**, enter `skills.icyzhao.com` and save.
 4. Do not add a committed `CNAME` file for this workflow. GitHub stores the
    custom domain setting for Actions-based Pages publishing.
-5. Expect GitHub to show DNS check or certificate issuance as pending for a few
-   minutes after DNS changes.
+5. GitHub's native certificate status may stay pending or unavailable when
+   Cloudflare is proxied. Treat the public `https://skills.icyzhao.com/` result
+   as the production HTTPS gate.
 
 ## Cloudflare DNS Setup
 
@@ -35,12 +37,18 @@ Use this reference for the one-time hosting setup or repair path for
 Type: CNAME
 Name: skills
 Target: randomradio.github.io
-Proxy status: DNS only
+Proxy status: Proxied
 TTL: Auto
 ```
 
-Use **DNS only** for GitHub Pages validation. Proxied records can delay or break
-GitHub's custom-domain and certificate checks.
+Keep the zone's **SSL/TLS encryption mode** on **Full**. Do not change the
+zone-wide mode unless the task explicitly calls for it; this setting affects all
+proxied hostnames in the zone.
+
+Use **DNS only** only as a temporary repair mode when you specifically need
+GitHub to re-run native custom-domain or certificate validation. Switch back to
+**Proxied** after the validation or repair step so Cloudflare serves HTTPS for
+the public market.
 
 ## DNS Verification
 
@@ -52,24 +60,45 @@ curl -fsS --max-time 10 'https://dns.google/resolve?name=skills.icyzhao.com&type
 curl -fsS --max-time 10 'https://cloudflare-dns.com/dns-query?name=skills.icyzhao.com&type=CNAME' -H 'accept: application/dns-json'
 ```
 
-Expected CNAME:
+When the record is **DNS only**, the expected CNAME is:
 
 ```text
 randomradio.github.io.
+```
+
+When the record is **Proxied**, public DNS should return Cloudflare edge
+addresses instead of the origin CNAME:
+
+```bash
+curl -fsS --max-time 10 'https://dns.google/resolve?name=skills.icyzhao.com&type=A'
 ```
 
 If direct `dig @1.1.1.1` or `dig @8.8.8.8` times out from the current network
 but DNS-over-HTTPS succeeds, treat the public DNS record as visible and note the
 local network limitation.
 
-## HTTPS Follow-Up
+## HTTPS Verification
 
-GitHub may show:
+Verify the public behavior, not just the GitHub settings page:
+
+```bash
+curl -I --max-time 30 https://skills.icyzhao.com/
+curl -I --max-time 30 http://skills.icyzhao.com/
+```
+
+Expected result:
+
+- `https://skills.icyzhao.com/` returns `HTTP/2 200` with `server: cloudflare`.
+- `http://skills.icyzhao.com/` redirects to `https://skills.icyzhao.com/`.
+
+GitHub may still show:
 
 - `DNS Check in Progress`
-- `DNS check unsuccessful` while caches update
+- `DNS check unsuccessful`
 - `certificate has not yet been issued`
 
-If DNS-over-HTTPS already returns the correct CNAME, wait and re-run **Check
-again** in GitHub Pages settings. Enable **Enforce HTTPS** once GitHub makes the
-checkbox available.
+Those GitHub-native HTTPS states are not blockers when Cloudflare proxied HTTPS
+is verified externally. If you want GitHub's **Enforce HTTPS** checkbox enabled
+too, temporarily set the Cloudflare record to **DNS only**, wait for GitHub's
+certificate to issue, enable the checkbox, then decide whether to return the
+record to **Proxied** for Cloudflare edge delivery.
