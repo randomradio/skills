@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RandomRadio Skills Market</title>
+    <meta
+      name="description"
+      content="A searchable market page for the RandomRadio agent skills collection."
+    />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="RandomRadio Skills home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img">
+            <path d="M4.5 8.5h15v10h-15z" />
+            <path d="M8 8.5 12 5l4 3.5" />
+            <path d="M8.5 13h4.5" />
+            <circle cx="16.5" cy="13.5" r="1.7" />
+          </svg>
+        </span>
+        <span>RandomRadio <strong>Skills</strong></span>
+      </a>
+
+      <label class="search-shell" for="skill-search">
+        <span aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m16.5 16.5 4 4" />
+          </svg>
+        </span>
+        <input
+          id="skill-search"
+          type="search"
+          placeholder="Search skills by name, category, or capability"
+          autocomplete="off"
+        />
+        <kbd>/</kbd>
+      </label>
+
+      <nav class="top-actions" aria-label="Primary">
+        <a class="ghost-link" href="https://github.com/randomradio/skills">GitHub</a>
+        <button
+          class="button button-dark"
+          type="button"
+          data-copy="installAll"
+          aria-label="Copy full collection install command"
+        >
+          <span aria-hidden="true">›_</span>
+          <span data-copy-label>Install collection</span>
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="domain">skills.icyzhao.com</p>
+          <h1 id="hero-title"><span id="skill-count">19</span> RandomRadio skills</h1>
+          <p class="lede">
+            A personal skill market for installing, updating, and discovering agent workflows
+            across planning, review, debugging, diagrams, deployment, and knowledge capture.
+          </p>
+          <div class="hero-stats" aria-label="Collection stats">
+            <div>
+              <strong id="stat-skills">19</strong>
+              <span>skills</span>
+            </div>
+            <div>
+              <strong id="stat-agents">27</strong>
+              <span>agents</span>
+            </div>
+            <div>
+              <strong id="stat-version">1.4.0</strong>
+              <span>collection</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="command-panel" aria-label="Install commands">
+          <div class="command-group">
+            <div class="command-label">Install for Codex</div>
+            <button
+              class="command"
+              type="button"
+              data-copy="installCodex"
+              aria-label="Copy Codex install command"
+            >
+              <code id="cmd-install-codex">Loading...</code>
+              <span data-copy-label>Copy</span>
+            </button>
+          </div>
+          <div class="command-group">
+            <div class="command-label">Install for Claude Code</div>
+            <button
+              class="command"
+              type="button"
+              data-copy="installClaude"
+              aria-label="Copy Claude Code install command"
+            >
+              <code id="cmd-install-claude">Loading...</code>
+              <span data-copy-label>Copy</span>
+            </button>
+          </div>
+          <div class="command-group">
+            <div class="command-label">Update existing install</div>
+            <button
+              class="command"
+              type="button"
+              data-copy="update"
+              aria-label="Copy update command"
+            >
+              <code id="cmd-update">Loading...</code>
+              <span data-copy-label>Copy</span>
+            </button>
+          </div>
+        </aside>
+      </section>
+
+      <section class="release-rail" aria-label="Update policy">
+        <div>
+          <strong>Stable by default</strong>
+          <span>Patch and minor updates are intended to be non-breaking.</span>
+        </div>
+        <div>
+          <strong>Repo-owned registry</strong>
+          <span>The catalog below is generated from checked-in skill frontmatter.</span>
+        </div>
+        <div>
+          <strong>Single-skill install later</strong>
+          <span>Current commands install the full collection honestly.</span>
+        </div>
+      </section>
+
+      <section class="catalog" aria-labelledby="catalog-title">
+        <div class="catalog-heading">
+          <div>
+            <h2 id="catalog-title">Skill catalog</h2>
+            <p id="catalog-summary">Loading current skills...</p>
+          </div>
+          <label class="sort-control">
+            <span>Sort</span>
+            <select id="sort-select">
+              <option value="featured">Featured</option>
+              <option value="name">Name</option>
+              <option value="category">Category</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="filters" id="filters" aria-label="Skill categories"></div>
+        <div class="grid" id="skill-grid"></div>
+        <p class="empty-state" id="empty-state" hidden>
+          No skills match that search. Clear the filter and try a capability like
+          <button type="button" data-search="review">review</button> or
+          <button type="button" data-search="diagram">diagram</button>.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Generated from the RandomRadio skills repo.</span>
+      <a href="./registry.json">registry.json</a>
+    </footer>
+
+    <template id="skill-card-template">
+      <article class="skill-card">
+        <div class="card-head">
+          <div class="skill-icon" aria-hidden="true"></div>
+          <div>
+            <h3></h3>
+            <p class="skill-category"></p>
+          </div>
+        </div>
+        <p class="skill-description"></p>
+        <div class="meta-line"></div>
+        <div class="card-actions">
+          <button class="copy-id" type="button">Copy id</button>
+          <a class="source-link">Source</a>
+        </div>
+      </article>
+    </template>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>

@@ -25,6 +25,15 @@ claude plugin add ./plugins/randomradio
 | `rr:compound-refresh` | Refresh stale or overlapping solution docs |
 | `rr:git-commit-push-pr` | Commit, push, and open a PR with repo conventions |
 
+## Skills Market
+
+The static catalog for `skills.icyzhao.com` lives in `site/`.
+
+```bash
+node site/scripts/build-registry.mjs
+cd site && python3 -m http.server 4173
+```
+
 ## Workflow
 
 ```
