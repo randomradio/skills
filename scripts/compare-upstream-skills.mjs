@@ -41,6 +41,18 @@ function stripFrontmatter(source) {
   return source.replace(/^---\n[\s\S]*?\n---\n/, "");
 }
 
+function parseFrontmatter(source) {
+  const match = source.match(/^---\n([\s\S]*?)\n---\n/);
+  const out = {};
+  if (!match) return out;
+  match[1].split("\n").forEach((line) => {
+    const keyMatch = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+    if (!keyMatch) return;
+    out[keyMatch[1]] = keyMatch[2].trim().replace(/^["']|["']$/g, "");
+  });
+  return out;
+}
+
 function normalizeLines(source) {
   return stripFrontmatter(source)
     .split(/\n+/)
@@ -60,6 +72,22 @@ function similarity(left, right) {
   return intersection / union.size;
 }
 
+function headings(source) {
+  return stripFrontmatter(source)
+    .split("\n")
+    .map((line) => line.match(/^(#{1,3})\s+(.+)$/)?.[2]?.trim())
+    .filter(Boolean);
+}
+
+function normalizeHeading(value) {
+  return value.toLowerCase().replace(/[`*_]/g, "").replace(/\s+/g, " ").trim();
+}
+
+function uniqueHeadings(left, right, limit = 8) {
+  const rightSet = new Set(right.map(normalizeHeading));
+  return left.filter((heading) => !rightSet.has(normalizeHeading(heading))).slice(0, limit);
+}
+
 function localSkillIds() {
   return fs
     .readdirSync(skillsRoot, { withFileTypes: true })
@@ -76,9 +104,53 @@ function upstreamSkillPath(manifest, entry) {
   return path.join(root, entry.upstreamSkill, "SKILL.md");
 }
 
+function compatibilityResult(entry, localSource, id, localMeta) {
+  if (entry.mode === "original") {
+    return { status: "repo-owned", missingMarkers: [], errors: [], requiredCount: 0 };
+  }
+
+  const errors = [];
+  const compatibility = entry.localCompatibility;
+  if (!compatibility) {
+    errors.push("missing localCompatibility contract");
+    return { status: "missing-contract", missingMarkers: [], errors, requiredCount: 0 };
+  }
+
+  if (localMeta.name !== `rr:${id}`) {
+    errors.push(`frontmatter name must stay rr:${id}`);
+  }
+
+  if (!Array.isArray(compatibility.preserve) || compatibility.preserve.length === 0) {
+    errors.push("localCompatibility.preserve must list local changes to keep");
+  }
+
+  if (!compatibility.syncStrategy) {
+    errors.push("localCompatibility.syncStrategy is required");
+  }
+
+  const requiredMarkers = compatibility.requiredMarkers || [];
+  const missingMarkers = requiredMarkers.filter((marker) => !localSource.includes(marker));
+  missingMarkers.forEach((marker) => errors.push(`missing required local marker: ${marker}`));
+
+  return {
+    status: errors.length ? "failed" : "passed",
+    missingMarkers,
+    errors,
+    requiredCount: requiredMarkers.length,
+  };
+}
+
+function syncDecision(result) {
+  if (result.status === "repo-owned") return "update in repo";
+  if (result.status === "missing-upstream") return "blocked: upstream unavailable";
+  if (result.compatibility.status !== "passed") return "blocked: local contract failed";
+  if (result.status === "in-sync") return "safe: already aligned";
+  return "review upstream, preserve local contract";
+}
+
 function validateManifest(manifest, ids) {
   const errors = [];
-  if (manifest.schemaVersion !== "2026-07-06.upstream-skills.v1") {
+  if (manifest.schemaVersion !== "2026-07-06.upstream-skills.v2") {
     errors.push(`Unexpected schemaVersion: ${manifest.schemaVersion || "(missing)"}`);
   }
 
@@ -101,6 +173,9 @@ function validateManifest(manifest, ids) {
     if (entry.provider && !manifest.providers?.[entry.provider]) {
       errors.push(`${id} references unknown provider ${entry.provider}`);
     }
+    if (entry.mode !== "original" && !entry.localCompatibility) {
+      errors.push(`${id} is ${entry.mode} but has no localCompatibility contract`);
+    }
   });
 
   return errors;
@@ -110,7 +185,9 @@ function compareSkill(manifest, id) {
   const entry = manifest.skills[id];
   const localPath = path.join(skillsRoot, id, "SKILL.md");
   const localSource = fs.readFileSync(localPath, "utf8");
+  const localMeta = parseFrontmatter(localSource);
   const upstreamPath = upstreamSkillPath(manifest, entry);
+  const compatibility = compatibilityResult(entry, localSource, id, localMeta);
   const base = {
     id,
     mode: entry.mode,
@@ -120,26 +197,43 @@ function compareSkill(manifest, id) {
     updatePolicy: entry.updatePolicy || "",
     localPath: path.relative(repoRoot, localPath),
     upstreamPath: upstreamPath || "",
+    localName: localMeta.name || "",
+    upstreamName: "",
     localHash: sha256(localSource).slice(0, 12),
     upstreamHash: "",
     similarity: null,
     status: entry.upstreamSkill ? "missing-upstream" : "repo-owned",
+    compatibility,
+    syncDecision: "",
+    preserve: entry.localCompatibility?.preserve || [],
+    requiredMarkers: entry.localCompatibility?.requiredMarkers || [],
+    localOnlyHeadings: [],
+    upstreamOnlyHeadings: [],
   };
+  base.syncDecision = syncDecision(base);
 
   if (!upstreamPath) return base;
   if (!fs.existsSync(upstreamPath)) return base;
 
   const upstreamSource = fs.readFileSync(upstreamPath, "utf8");
+  const upstreamMeta = parseFrontmatter(upstreamSource);
   const upstreamHash = sha256(upstreamSource).slice(0, 12);
   const localHash = sha256(localSource).slice(0, 12);
   const score = similarity(localSource, upstreamSource);
+  const localHeadings = headings(localSource);
+  const upstreamHeadings = headings(upstreamSource);
 
-  return {
+  const result = {
     ...base,
+    upstreamName: upstreamMeta.name || "",
     upstreamHash,
     similarity: score,
     status: localHash === upstreamHash ? "in-sync" : "diverged",
+    localOnlyHeadings: uniqueHeadings(localHeadings, upstreamHeadings),
+    upstreamOnlyHeadings: uniqueHeadings(upstreamHeadings, localHeadings),
   };
+  result.syncDecision = syncDecision(result);
+  return result;
 }
 
 function percent(value) {
@@ -157,10 +251,57 @@ function markdownReport(manifest, results, errors) {
         result.upstreamSkill || "-",
         result.status,
         percent(result.similarity) || "-",
+        result.compatibility.status,
         result.updatePolicy || "-",
+        result.syncDecision,
       ].join(" | "),
     )
     .map((row) => `| ${row} |`)
+    .join("\n");
+  const details = results
+    .filter((result) => result.upstreamSkill)
+    .map((result) => {
+      const preserve = result.preserve.length
+        ? result.preserve.map((item) => `- ${item}`).join("\n")
+        : "- No local preservation notes.";
+      const missing = result.compatibility.missingMarkers.length
+        ? result.compatibility.missingMarkers.map((item) => `- ${item}`).join("\n")
+        : "- None.";
+      const localOnly = result.localOnlyHeadings.length
+        ? result.localOnlyHeadings.map((item) => `- ${item}`).join("\n")
+        : "- None in first-pass heading comparison.";
+      const upstreamOnly = result.upstreamOnlyHeadings.length
+        ? result.upstreamOnlyHeadings.map((item) => `- ${item}`).join("\n")
+        : "- None in first-pass heading comparison.";
+
+      return `### ${result.id}
+
+| Field | Value |
+|---|---|
+| Local name | \`${result.localName || "-"}\` |
+| Upstream name | \`${result.upstreamName || result.upstreamSkill}\` |
+| Local hash | \`${result.localHash}\` |
+| Upstream hash | \`${result.upstreamHash || "-"}\` |
+| Compatibility | ${result.compatibility.status} |
+| Sync decision | ${result.syncDecision} |
+
+Preserve:
+
+${preserve}
+
+Missing required markers:
+
+${missing}
+
+Local-only headings:
+
+${localOnly}
+
+Upstream-only headings:
+
+${upstreamOnly}
+`;
+    })
     .join("\n");
 
   const contracts = (manifest.localContracts || []).map((item) => `- ${item}`).join("\n");
@@ -183,9 +324,13 @@ ${contracts}
 
 ## Status
 
-| Skill | Mode | Provider | Upstream skill | Status | Similarity | Update policy |
-|---|---|---|---|---|---:|---|
+| Skill | Mode | Provider | Upstream skill | Status | Similarity | Compatibility | Update policy | Sync decision |
+|---|---|---|---|---|---:|---|---|---|
 ${rows}
+
+## Skill Deltas
+
+${details}
 
 ## Validation
 
@@ -203,6 +348,9 @@ const manifest = readJson(manifestPath);
 const ids = localSkillIds();
 const errors = validateManifest(manifest, ids);
 const results = ids.map((id) => compareSkill(manifest, id));
+results.forEach((result) => {
+  result.compatibility.errors.forEach((error) => errors.push(`${result.id}: ${error}`));
+});
 
 if (requireUpstream && !allowMissingUpstream) {
   results
@@ -224,6 +372,8 @@ if (!checkOnly && !reportPath) {
       upstream: result.upstreamSkill || "-",
       status: result.status,
       similarity: percent(result.similarity) || "-",
+      compatibility: result.compatibility.status,
+      decision: result.syncDecision,
     })),
   );
 }

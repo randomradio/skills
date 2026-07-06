@@ -168,6 +168,7 @@ const skills = skillDirs.map((id) => {
       providerName: upstreamProvider?.displayName || null,
       upstreamSkill: upstreamEntry.upstreamSkill || null,
       updatePolicy: upstreamEntry.updatePolicy || null,
+      syncStrategy: upstreamEntry.localCompatibility?.syncStrategy || null,
     },
   };
 });

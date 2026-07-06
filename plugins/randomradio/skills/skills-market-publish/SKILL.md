@@ -8,7 +8,7 @@ description: >
   Cloudflare DNS for skills", "turn these skills into a marketplace", "merge
   and push skills release", "non-breaking skill update", "showcase my skills".
 argument-hint: "[domain, release branch, or brief publish request]"
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Skills Market Publish
@@ -48,7 +48,8 @@ git branch --show-current
 5. If `dig` fails but `DOH_OK` works -> trust DNS-over-HTTPS for public DNS
    verification and note local resolver limitations.
 6. If `UPSTREAM_MAP_OK` -> use `plugins/randomradio/skills/upstream.json` before
-   changing existing skills; otherwise add or repair the mapping first.
+   changing existing skills; otherwise add or repair the mapping and local
+   compatibility contracts first.
 
 ## Step 2: Resolve Publish Defaults
 
@@ -60,7 +61,7 @@ git branch --show-current
 | `dns_target` | `<github-owner>.github.io` | GitHub Pages custom-domain target |
 | `site_dir` | `site/` | Static market output directory |
 | `registry_command` | `node site/scripts/build-registry.mjs` | Repo-local catalog generator |
-| `upstream_manifest` | `plugins/randomradio/skills/upstream.json` | Tracks CE lineage and local ownership |
+| `upstream_manifest` | `plugins/randomradio/skills/upstream.json` | Tracks CE lineage, local ownership, and sync compatibility contracts |
 | `pages_source` | GitHub Actions | Matches `.github/workflows/skills-market.yml` |
 | `dns_proxy` | Proxied | Production HTTPS is served by Cloudflare edge |
 | `push_policy` | Push only after explicit publish/merge request | Avoid accidental releases |
@@ -75,28 +76,31 @@ repo files or the user request, ask one concise question.
 2. Keep frontmatter `name` as `rr:<skill-id>`.
 3. If the skill is derived from Compound Engineering, add or update its entry in
    `plugins/randomradio/skills/upstream.json` before editing the skill body.
-4. For existing `fork` skills, run the upstream comparison when upstream skills
-   are installed locally:
+4. For existing `fork` skills, confirm `localCompatibility.preserve`,
+   `localCompatibility.requiredMarkers`, and `localCompatibility.syncStrategy`
+   describe the local changes that must survive upstream sync.
+5. Run the upstream comparison when upstream skills are installed locally:
 
 ```bash
-node scripts/compare-upstream-skills.mjs
+node scripts/compare-upstream-skills.mjs --write-report docs/upstream/compound-engineering-skill-report.md
 ```
 
-5. Adopt upstream improvements by default when they are non-breaking, but keep
+6. Adopt upstream improvements by default when they are non-breaking, but keep
    RandomRadio local contracts: `rr:` names, install/update behavior, registry
    metadata, and deliberate workflow simplifications.
-6. Update `README.md` and `.claude-plugin/marketplace.json` skill counts when the
+7. Update `README.md` and `.claude-plugin/marketplace.json` skill counts when the
    public collection changes.
-7. Bump `plugins/randomradio/.claude-plugin/plugin.json` with a non-breaking
+8. Bump `plugins/randomradio/.claude-plugin/plugin.json` with a non-breaking
    semver increment for additive skills.
-8. Run the registry generator:
+9. Run the registry generator:
 
 ```bash
 node site/scripts/build-registry.mjs
 ```
 
-Exit gate: `site/registry.json` must include every published skill, including
-its upstream lineage, and must not be hand-edited except for emergency recovery.
+Exit gate: `site/registry.json` must include every published skill, and
+`node scripts/compare-upstream-skills.mjs --check --allow-missing-upstream` must
+pass so CE-derived skills keep their local compatibility contracts.
 
 ## Step 4: Verify CI and Static Market
 
@@ -170,8 +174,9 @@ Use this output structure:
 2. **Market status**: skill count, registry update, and deployed site target.
 3. **Hosting status**: GitHub Pages source, custom domain, Cloudflare DNS value,
    and HTTPS/certificate state.
-4. **Upstream status**: CE-derived skills touched, manifest mode, and whether
-   upstream comparison was run or skipped because upstream was unavailable.
+4. **Upstream status**: CE-derived skills touched, manifest mode, compatibility
+   result, and whether upstream comparison was run or skipped because upstream
+   was unavailable.
 5. **Verification**: commands run and pass/fail evidence.
 6. **Follow-up**: only unresolved external waits, such as GitHub certificate
    issuance or DNS propagation.

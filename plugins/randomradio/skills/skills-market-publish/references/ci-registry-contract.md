@@ -8,7 +8,7 @@ the source of record; the public site is a derived artifact.
 | Path | Purpose |
 |---|---|
 | `plugins/randomradio/skills/*/SKILL.md` | Published skill definitions |
-| `plugins/randomradio/skills/upstream.json` | Upstream lineage and local ownership map |
+| `plugins/randomradio/skills/upstream.json` | Upstream lineage, local ownership, and sync compatibility contracts |
 | `plugins/randomradio/.claude-plugin/plugin.json` | Collection metadata and version |
 | `.claude-plugin/marketplace.json` | Marketplace entry and public skill count |
 | `scripts/compare-upstream-skills.mjs` | Upstream manifest validator and local comparison tool |
@@ -21,14 +21,17 @@ the source of record; the public site is a derived artifact.
 1. Add the skill directory and any references/scripts.
 2. Keep `name: rr:<skill-id>` in frontmatter.
 3. Add or update `plugins/randomradio/skills/upstream.json`.
-4. For Compound Engineering-derived skills, compare against the upstream skill
-   before editing when the upstream install is available locally.
-5. Update `README.md` if the skill belongs in the short public table.
-6. Update `.claude-plugin/marketplace.json` when the skill count changes.
-7. Bump `plugins/randomradio/.claude-plugin/plugin.json` with a non-breaking
+4. For Compound Engineering-derived skills, define or update
+   `localCompatibility.preserve`, `localCompatibility.requiredMarkers`, and
+   `localCompatibility.syncStrategy`.
+5. Compare against the upstream skill before editing when the upstream install
+   is available locally.
+6. Update `README.md` if the skill belongs in the short public table.
+7. Update `.claude-plugin/marketplace.json` when the skill count changes.
+8. Bump `plugins/randomradio/.claude-plugin/plugin.json` with a non-breaking
    semver increment.
-8. Run `node site/scripts/build-registry.mjs`.
-9. Verify `site/registry.json` contains the new skill id and upstream lineage.
+9. Run `node site/scripts/build-registry.mjs`.
+10. Verify `site/registry.json` contains the new skill id and upstream lineage.
 
 ## Verification Commands
 
@@ -52,7 +55,7 @@ Pull requests validate:
 
 - installer/update shell syntax
 - `randomradio-upgrade` structure
-- upstream lineage manifest coverage
+- upstream lineage and local compatibility contract coverage
 - registry freshness
 - site JavaScript syntax
 - required static site files
@@ -65,6 +68,7 @@ Pushes to `master` deploy `site/` through GitHub Pages after validation passes.
 |---|---|---|
 | CI says registry is stale | Skill files changed without rerunning generator | Run `node site/scripts/build-registry.mjs` and commit `site/registry.json` |
 | CI says upstream entry is missing | Skill directory was added without a lineage entry | Add the skill to `plugins/randomradio/skills/upstream.json` |
+| CI says local marker is missing | A CE fork lost a protected RandomRadio behavior during sync | Restore the behavior or intentionally update `localCompatibility.requiredMarkers` with the reason in the commit |
 | Skill count is wrong on site | Marketplace/README updated but registry not rebuilt | Rebuild registry and inspect `collection.skillCount` |
 | GitHub Pages deploy did not run | Commit not on `master`, workflow path filter missed files, or Actions disabled | Check branch, workflow file, and repository Actions settings |
 | Generated timestamp keeps dirtying git | Generator lost existing `generatedAt` behavior | Preserve existing timestamp unless intentionally overridden |

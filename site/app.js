@@ -103,6 +103,7 @@ function filteredSkills() {
         skill.upstream?.mode,
         skill.upstream?.providerName,
         skill.upstream?.upstreamSkill,
+        skill.upstream?.syncStrategy,
         ...(skill.tags || []),
       ]
         .join(" ")

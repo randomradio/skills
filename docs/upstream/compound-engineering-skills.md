@@ -3,7 +3,8 @@
 RandomRadio keeps a set of skills that are derived from, inspired by, or
 independent of Compound Engineering skills. This file defines the maintenance
 model; `plugins/randomradio/skills/upstream.json` is the machine-readable source
-for the actual mapping.
+for the mapping and the local compatibility contracts that protect RandomRadio
+changes during upstream sync.
 
 ## Policy
 
@@ -20,7 +21,7 @@ Use these modes:
 | `inspired` | Upstream influenced the design, but the skill is not synced | Use upstream only as context |
 | `original` | Repo-owned skill with no tracked upstream | Update directly in this repo |
 
-## Local Contracts
+## Local Compatibility Contracts
 
 These contracts survive upstream adoption:
 
@@ -29,6 +30,20 @@ These contracts survive upstream adoption:
 - Additive updates use non-breaking semantic version bumps.
 - Local workflow simplifications can stay when they make the skill better for
   this collection.
+
+Each CE-derived skill must also define `localCompatibility` in
+`plugins/randomradio/skills/upstream.json`:
+
+| Field | Purpose |
+|---|---|
+| `syncStrategy` | Short rule for how to combine upstream improvements with the local fork |
+| `preserve` | Human-readable local changes that must survive sync |
+| `requiredMarkers` | Exact strings that must remain in the local `SKILL.md` |
+
+`node scripts/compare-upstream-skills.mjs --check --allow-missing-upstream`
+fails if a CE fork is missing this contract, if `name: rr:<skill-id>` is lost,
+or if any required marker disappears. This makes sync compatibility a CI gate,
+not a memory exercise.
 
 ## Compare Workflow
 
@@ -53,4 +68,5 @@ node scripts/compare-upstream-skills.mjs --check --allow-missing-upstream
 ```
 
 That keeps CI independent from any private local installation while still
-requiring every published skill to declare its lineage.
+requiring every published skill to declare its lineage and every CE fork to
+declare the local contract that sync must preserve.

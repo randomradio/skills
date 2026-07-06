@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "2026-07-06.upstream-skills.v1",
-  "description": "Tracks upstream lineage for published RandomRadio skills. The repo-owned skill remains the source of record; upstream entries are comparison sources for non-breaking updates.",
+  "schemaVersion": "2026-07-06.upstream-skills.v2",
+  "description": "Tracks upstream lineage and local compatibility contracts for published RandomRadio skills. The repo-owned skill remains the source of record; upstream entries are comparison sources for non-breaking updates.",
   "localContracts": [
     "Published skill frontmatter names stay under the rr: namespace.",
     "RandomRadio install, registry, market, and release behavior stay repo-owned.",
@@ -19,61 +19,199 @@
       "mode": "fork",
       "provider": "compound-engineering",
       "upstreamSkill": "ce-brainstorm",
-      "updatePolicy": "prefer-upstream-with-local-contracts"
+      "updatePolicy": "prefer-upstream-with-local-contracts",
+      "localCompatibility": {
+        "syncStrategy": "overlay-randomradio-workflow-on-upstream",
+        "preserve": [
+          "Keep the public `rr:brainstorm` identity and handoff to `rr:plan`.",
+          "Keep the lightweight RandomRadio spec path under `docs/specs/`.",
+          "Keep the simplified scope triage instead of requiring the full CE brainstorm artifact pipeline."
+        ],
+        "requiredMarkers": [
+          "name: rr:brainstorm",
+          "docs/specs/YYYY-MM-DD-<topic>-design.md",
+          "rr:plan"
+        ]
+      }
     },
     "compound": {
       "mode": "fork",
       "provider": "compound-engineering",
       "upstreamSkill": "ce-compound",
-      "updatePolicy": "prefer-upstream-with-local-contracts"
+      "updatePolicy": "prefer-upstream-with-local-contracts",
+      "localCompatibility": {
+        "syncStrategy": "adopt-upstream-learning-improvements-with-local-schema",
+        "preserve": [
+          "Keep `rr:compound` identity and the repo-owned schema-backed `docs/solutions/` output.",
+          "Keep local support files under the RandomRadio skill directory.",
+          "Keep discoverability checks that mention `AGENTS.md`, `CLAUDE.md`, and `README.md`."
+        ],
+        "requiredMarkers": [
+          "name: rr:compound",
+          "docs/solutions/",
+          "references/schema.yaml",
+          "rr:compound-refresh"
+        ]
+      }
     },
     "compound-refresh": {
       "mode": "fork",
       "provider": "compound-engineering",
       "upstreamSkill": "ce-compound-refresh",
-      "updatePolicy": "prefer-upstream-with-local-contracts"
+      "updatePolicy": "prefer-upstream-with-local-contracts",
+      "localCompatibility": {
+        "syncStrategy": "adopt-refresh-rules-with-randomradio-modes",
+        "preserve": [
+          "Keep `rr:compound-refresh` identity and `mode:interactive|autofix` interface.",
+          "Keep the RandomRadio Keep/Update/Consolidate/Replace/Delete report shape.",
+          "Keep all writes scoped to `docs/solutions/` unless the user asks otherwise."
+        ],
+        "requiredMarkers": [
+          "name: rr:compound-refresh",
+          "mode:interactive|autofix",
+          "docs/solutions/",
+          "Compound Refresh Report"
+        ]
+      }
     },
     "debug": {
       "mode": "fork",
       "provider": "compound-engineering",
       "upstreamSkill": "ce-debug",
-      "updatePolicy": "prefer-upstream-with-local-contracts"
+      "updatePolicy": "prefer-upstream-with-local-contracts",
+      "localCompatibility": {
+        "syncStrategy": "adopt-root-cause-discipline-with-randomradio-handoffs",
+        "preserve": [
+          "Keep `rr:debug` identity and concise root-cause execution loop.",
+          "Keep RandomRadio handoffs to `rr:brainstorm` for design problems.",
+          "Keep the structured Debug Summary output."
+        ],
+        "requiredMarkers": [
+          "name: rr:debug",
+          "rr:brainstorm",
+          "Debug Summary"
+        ]
+      }
     },
     "document-review": {
       "mode": "fork",
       "provider": "compound-engineering",
       "upstreamSkill": "ce-doc-review",
-      "updatePolicy": "prefer-upstream-with-local-contracts"
+      "updatePolicy": "prefer-upstream-with-local-contracts",
+      "localCompatibility": {
+        "syncStrategy": "adopt-review-personas-with-randomradio-agent-paths",
+        "preserve": [
+          "Keep `rr:document-review` identity and `mode:interactive|headless` interface.",
+          "Keep reviewer agents referenced from RandomRadio agent paths.",
+          "Keep programmatic headless output support."
+        ],
+        "requiredMarkers": [
+          "name: rr:document-review",
+          "mode:interactive|headless",
+          "agents/document-review/",
+          "Document Review: [filename]"
+        ]
+      }
     },
     "git-commit": {
       "mode": "fork",
       "provider": "compound-engineering",
       "upstreamSkill": "ce-commit",
-      "updatePolicy": "prefer-upstream-with-local-contracts"
+      "updatePolicy": "prefer-upstream-with-local-contracts",
+      "localCompatibility": {
+        "syncStrategy": "adopt-commit-message-improvements-with-local-command-shape",
+        "preserve": [
+          "Keep `rr:git-commit` identity.",
+          "Keep convention detection from project docs and recent commits.",
+          "Keep logical commit splitting as an explicit step."
+        ],
+        "requiredMarkers": [
+          "name: rr:git-commit",
+          "Detect Conventions",
+          "Split if Needed",
+          "Verify"
+        ]
+      }
     },
     "git-commit-push-pr": {
       "mode": "fork",
       "provider": "compound-engineering",
       "upstreamSkill": "ce-commit-push-pr",
-      "updatePolicy": "prefer-upstream-with-local-contracts"
+      "updatePolicy": "prefer-upstream-with-local-contracts",
+      "localCompatibility": {
+        "syncStrategy": "adopt-pr-description-improvements-with-randomradio-flow",
+        "preserve": [
+          "Keep `rr:git-commit-push-pr` identity.",
+          "Keep create/update mode split.",
+          "Keep PR body sections for Summary, Test Plan, and Key Decisions."
+        ],
+        "requiredMarkers": [
+          "name: rr:git-commit-push-pr",
+          "Create Mode",
+          "Update Mode",
+          "Test Plan"
+        ]
+      }
     },
     "git-worktree": {
       "mode": "fork",
       "provider": "compound-engineering",
       "upstreamSkill": "ce-worktree",
-      "updatePolicy": "prefer-upstream-with-local-contracts"
+      "updatePolicy": "prefer-upstream-with-local-contracts",
+      "localCompatibility": {
+        "syncStrategy": "adopt-worktree-safety-improvements-with-local-cli",
+        "preserve": [
+          "Keep `rr:git-worktree` identity.",
+          "Keep environment file copy behavior.",
+          "Keep branch safety rules for uncommitted changes."
+        ],
+        "requiredMarkers": [
+          "name: rr:git-worktree",
+          "Copy environment files",
+          "Branch Safety",
+          "git worktree"
+        ]
+      }
     },
     "ideate": {
       "mode": "fork",
       "provider": "compound-engineering",
       "upstreamSkill": "ce-ideate",
-      "updatePolicy": "prefer-upstream-with-local-contracts"
+      "updatePolicy": "prefer-upstream-with-local-contracts",
+      "localCompatibility": {
+        "syncStrategy": "adopt-ideation-rigor-with-randomradio-pipeline",
+        "preserve": [
+          "Keep `rr:ideate` identity and full RandomRadio workflow chain.",
+          "Keep grounding in codebase, issues, and `docs/solutions/`.",
+          "Keep handoff to `rr:brainstorm`."
+        ],
+        "requiredMarkers": [
+          "name: rr:ideate",
+          "rr:ideate → rr:brainstorm → rr:plan → rr:work → rr:review → rr:compound",
+          "docs/solutions/",
+          "rr:brainstorm"
+        ]
+      }
     },
     "plan": {
       "mode": "fork",
       "provider": "compound-engineering",
       "upstreamSkill": "ce-plan",
-      "updatePolicy": "prefer-upstream-with-local-contracts"
+      "updatePolicy": "prefer-upstream-with-local-contracts",
+      "localCompatibility": {
+        "syncStrategy": "adopt-planning-depth-with-randomradio-plan-artifacts",
+        "preserve": [
+          "Keep `rr:plan` identity and RandomRadio plan path under `docs/plans/`.",
+          "Keep TDD-oriented implementation units.",
+          "Keep handoff to `rr:work`."
+        ],
+        "requiredMarkers": [
+          "name: rr:plan",
+          "docs/plans/YYYY-MM-DD-<feature-name>.md",
+          "TDD",
+          "rr:work"
+        ]
+      }
     },
     "plantuml-qpr-render": {
       "mode": "original",
@@ -87,13 +225,41 @@
       "mode": "fork",
       "provider": "compound-engineering",
       "upstreamSkill": "ce-resolve-pr-feedback",
-      "updatePolicy": "prefer-upstream-with-local-contracts"
+      "updatePolicy": "prefer-upstream-with-local-contracts",
+      "localCompatibility": {
+        "syncStrategy": "adopt-feedback-routing-with-randomradio-agents",
+        "preserve": [
+          "Keep `rr:resolve-pr-feedback` identity.",
+          "Keep workflow agent path under `agents/workflow/`.",
+          "Keep default-to-fixing posture and safety rules for untrusted review text."
+        ],
+        "requiredMarkers": [
+          "name: rr:resolve-pr-feedback",
+          "agents/workflow/",
+          "Default to **fixing**",
+          "Safety Rules"
+        ]
+      }
     },
     "review": {
       "mode": "fork",
       "provider": "compound-engineering",
       "upstreamSkill": "ce-code-review",
-      "updatePolicy": "prefer-upstream-with-local-contracts"
+      "updatePolicy": "prefer-upstream-with-local-contracts",
+      "localCompatibility": {
+        "syncStrategy": "adopt-review-rigor-with-randomradio-modes-and-artifacts",
+        "preserve": [
+          "Keep `rr:review` identity and `mode:autofix|mode:report-only|mode:headless` interface.",
+          "Keep artifact output under `/tmp/randomradio/rr-review/`.",
+          "Keep headless/autofix rule that parent workflows own commits, pushes, and PRs."
+        ],
+        "requiredMarkers": [
+          "name: rr:review",
+          "mode:autofix|mode:report-only|mode:headless",
+          "/tmp/randomradio/rr-review/",
+          "Autofix/headless never commit"
+        ]
+      }
     },
     "skills-market-publish": {
       "mode": "original",
@@ -119,7 +285,23 @@
       "mode": "fork",
       "provider": "compound-engineering",
       "upstreamSkill": "ce-work",
-      "updatePolicy": "prefer-upstream-with-local-contracts"
+      "updatePolicy": "prefer-upstream-with-local-contracts",
+      "localCompatibility": {
+        "syncStrategy": "adopt-execution-improvements-with-inline-first-randomradio-loop",
+        "preserve": [
+          "Keep `rr:work` identity and goal-driven loop.",
+          "Keep inline/task-list execution as the default.",
+          "Keep delegation optional and gated by platform support plus explicit user request.",
+          "Keep RandomRadio reference files under `references/goal-driven-loop.md`."
+        ],
+        "requiredMarkers": [
+          "name: rr:work",
+          "goal-driven loop",
+          "Optional delegation",
+          "Inline/task-list execution is the default",
+          "references/goal-driven-loop.md"
+        ]
+      }
     }
   }
 }
