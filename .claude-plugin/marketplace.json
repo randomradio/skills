@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "randomradio",
-      "description": "Goal-driven development tools — 19 skills and 27 agents for planning, execution, review, debugging, diagrams, and knowledge compounding.",
+      "description": "Goal-driven development tools — 20 skills and 27 agents for planning, execution, review, debugging, diagrams, publishing, and knowledge compounding.",
       "source": "./plugins/randomradio",
       "category": "development"
     }

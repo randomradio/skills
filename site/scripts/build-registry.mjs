@@ -32,6 +32,7 @@ const categoryById = new Map([
   ["quick-shoutout", "Deployment"],
   ["resolve-pr-feedback", "Git"],
   ["review", "Quality"],
+  ["skills-market-publish", "Deployment"],
   ["tdd", "Quality"],
   ["todo-create", "Productivity"],
   ["todo-resolve", "Productivity"],
@@ -45,6 +46,7 @@ const featuredIds = new Set([
   "review",
   "debug",
   "plantuml-qpr-render",
+  "skills-market-publish",
   "quick-shoutout",
 ]);
 

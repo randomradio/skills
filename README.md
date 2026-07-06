@@ -20,6 +20,7 @@ claude plugin add ./plugins/randomradio
 | `rr:debug` | Systematic root cause debugging |
 | `rr:tdd` | Test-driven development discipline |
 | `rr:plantuml-qpr-render` | Render PlantUML via qpr with controlled project/global preview artifacts |
+| `rr:skills-market-publish` | Publish skills and the public skills market through CI, GitHub Pages, and Cloudflare DNS |
 | `rr:quick-shoutout` | Publish apps to latentvibe.com via Cloudflare |
 | `rr:compound` | Capture solved problems as schema-backed `docs/solutions/` learnings |
 | `rr:compound-refresh` | Refresh stale or overlapping solution docs |
