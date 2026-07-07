@@ -30,8 +30,8 @@ Cannot connect to the Docker daemon
 Fix:
 
 1. Check whether Docker Desktop or the Docker daemon is running.
-2. If Docker cannot be started in this environment, try `plantuml -tpng` only if the local PlantUML CLI exists.
-3. If neither Docker nor PlantUML CLI is available, save the `.puml` source and give setup steps instead of pretending the render succeeded.
+2. If Docker cannot be started in this environment, try `plantuml "-t$OUTPUT_FORMAT"` only if the local PlantUML CLI exists.
+3. If no renderer is available, save the `.puml` source and give qpr setup steps instead of pretending the render succeeded.
 
 ## qpr Prompts for Docker Image Pull
 
@@ -85,8 +85,22 @@ Error: 'kitten' command not found. Required for --print.
 Fix:
 
 1. Do not use `--print` unless `kitten` is detected.
-2. Use qpr chat preview instead: render PNG and embed the absolute path in Markdown.
+2. Use qpr chat preview instead: render the selected SVG/PNG and embed the absolute path in Markdown.
 3. If the user specifically wants terminal graphics, ask them to run in Kitty or install Kitty's command-line tools.
+
+## SVG Preview Fails
+
+Symptoms:
+
+```text
+The render succeeded, but the chat UI does not display the SVG inline.
+```
+
+Fix:
+
+1. Verify the SVG exists, is non-empty, and starts with `<svg` or `<?xml`.
+2. Provide the absolute SVG path even if inline display fails.
+3. If the user needs an inline raster preview, run `plantuml-skill setup .png` or perform a one-off `"$QPR" --png --quiet "$PUML_FILE"` render.
 
 ## Output File Missing
 
@@ -102,7 +116,8 @@ Check these in order:
 Verification command:
 
 ```bash
-ls -l "$PUML_FILE" "${PUML_FILE%.puml}.png"
+OUTPUT_FILE="${PUML_FILE%.puml}${OUTPUT_EXT}"
+ls -l "$PUML_FILE" "$OUTPUT_FILE"
 ```
 
 ## Artifact Outside Controlled Directory
@@ -163,7 +178,7 @@ Fix:
 qpr server mode assumes `localhost:8080`. If that port is occupied, skip `--server` and use default qpr Docker rendering:
 
 ```bash
-"$QPR" --png --quiet "$PUML_FILE"
+"$QPR" "$OUTPUT_FLAG" --quiet "$PUML_FILE"
 ```
 
 ## Long-Running Watch Process

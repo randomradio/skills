@@ -2,13 +2,13 @@
 name: rr:skills-market-publish
 description: >
   Publish and maintain a skills marketplace from this repository using the
-  committed skills registry, GitHub Actions, GitHub Pages, and Cloudflare DNS.
+  workflow-regenerated skills registry, GitHub Actions, GitHub Pages, and Cloudflare DNS.
   Triggers: "publish the skills market", "setup skills.icyzhao.com", "deploy
   the skill catalog", "automate skill updates", "add GitHub Pages CI", "set up
   Cloudflare DNS for skills", "turn these skills into a marketplace", "merge
   and push skills release", "non-breaking skill update", "showcase my skills".
 argument-hint: "[domain, release branch, or brief publish request]"
-version: 1.2.0
+version: 1.3.0
 ---
 
 # Skills Market Publish
@@ -92,7 +92,10 @@ node scripts/compare-upstream-skills.mjs --write-report docs/upstream/compound-e
    public collection changes.
 8. Bump `plugins/randomradio/.claude-plugin/plugin.json` with a non-breaking
    semver increment for additive skills.
-9. Run the registry generator:
+9. Run the registry generator locally as a preflight when preparing a reviewable
+   diff. The GitHub workflow also regenerates the registry on `master`, commits
+   `site/registry.json` with the Actions bot when it changed, and deploys the
+   generated `site/` artifact.
 
 ```bash
 node site/scripts/build-registry.mjs
@@ -124,8 +127,8 @@ For UI-affecting market changes, run a local preview and inspect desktop/mobile:
 cd site && python3 -m http.server 4173
 ```
 
-Exit gate: do not publish while registry, syntax, whitespace, or preview checks
-fail. Fix the smallest cause first.
+Exit gate: do not publish while registry generation, syntax, whitespace, or
+preview checks fail. Fix the smallest cause first.
 
 ## Step 5: Merge and Push the Release
 
@@ -143,8 +146,9 @@ If fast-forward is impossible, stop and show the divergence instead of forcing a
 merge. After pushing, inspect GitHub Actions with `gh run list` when available,
 or use the browser Actions tab.
 
-Exit gate: the release branch on GitHub contains the market workflow and latest
-registry.
+Exit gate: the release branch on GitHub contains the market workflow, and the
+workflow's `Commit regenerated registry` job has either confirmed the registry
+is current or committed the regenerated `site/registry.json`.
 
 ## Step 6: Configure Pages and DNS
 

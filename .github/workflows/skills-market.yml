@@ -53,16 +53,17 @@ jobs:
           bash -n randomradio-upgrade/scripts/upgrade_skills.sh
           bash randomradio-upgrade/scripts/validate.sh
 
-      - name: Build skills registry
+      - name: Regenerate skills registry
         run: node site/scripts/build-registry.mjs
 
       - name: Validate upstream provenance
         run: node scripts/compare-upstream-skills.mjs --check --allow-missing-upstream
 
       - name: Check generated registry is committed
+        if: github.event_name == 'pull_request'
         run: |
           if ! git diff --exit-code -- site/registry.json; then
-            echo "::error file=site/registry.json::site/registry.json is out of date. Run node site/scripts/build-registry.mjs and commit the result."
+            echo "::error file=site/registry.json::site/registry.json is out of date for review. Run node site/scripts/build-registry.mjs and commit the result, or let the master workflow regenerate it after merge."
             exit 1
           fi
 
@@ -79,10 +80,46 @@ jobs:
           test -f site/app.js
           test -f site/registry.json
 
+  sync-registry:
+    name: Commit regenerated registry
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
+    needs: validate
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+
+      - name: Regenerate skills registry
+        run: node site/scripts/build-registry.mjs
+
+      - name: Commit registry changes
+        run: |
+          if git diff --quiet -- site/registry.json; then
+            echo "Registry already current."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/registry.json
+          git commit -m "chore: regenerate skills registry [skip ci]"
+          git push
+
   deploy:
     name: Deploy skills.icyzhao.com
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
-    needs: validate
+    needs:
+      - validate
+      - sync-registry
     runs-on: ubuntu-latest
 
     permissions:
@@ -104,7 +141,7 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Build skills registry
+      - name: Regenerate skills registry
         run: node site/scripts/build-registry.mjs
 
       - name: Configure GitHub Pages

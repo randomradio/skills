@@ -38,6 +38,36 @@ PUML_FILE="$DIAGRAM_DIR/$SLUG.puml"
 
 If the user's source file is outside the current project and outside `$PLANTUML_QPR_RENDER_DIR`, copy it into `DIAGRAM_DIR` and render the copy.
 
+## Persistent Output Format
+
+The skill defaults to SVG. Change the persistent image format only when the user explicitly asks `plantuml-skill setup .svg`, `plantuml-skill setup .png`, or the same command with a leading slash.
+
+```bash
+REQUESTED_EXT=".png"
+PLANTUML_QPR_CONFIG="${PLANTUML_QPR_CONFIG:-$HOME/.config/randomradio/plantuml-qpr-render/config}"
+case "$REQUESTED_EXT" in
+  .svg|svg) OUTPUT_FORMAT="svg" ;;
+  .png|png) OUTPUT_FORMAT="png" ;;
+  *) echo "UNSUPPORTED_OUTPUT_FORMAT $REQUESTED_EXT"; exit 2 ;;
+esac
+mkdir -p "$(dirname "$PLANTUML_QPR_CONFIG")"
+printf 'output_format=%s\n' "$OUTPUT_FORMAT" > "$PLANTUML_QPR_CONFIG"
+```
+
+Resolve the active image format for render commands:
+
+```bash
+PLANTUML_QPR_CONFIG="${PLANTUML_QPR_CONFIG:-$HOME/.config/randomradio/plantuml-qpr-render/config}"
+CONFIG_OUTPUT_FORMAT=$(sed -n 's/^output_format=//p' "$PLANTUML_QPR_CONFIG" 2>/dev/null | tail -1)
+case "$CONFIG_OUTPUT_FORMAT" in
+  svg|png) OUTPUT_FORMAT="$CONFIG_OUTPUT_FORMAT" ;;
+  *) OUTPUT_FORMAT="svg" ;;
+esac
+OUTPUT_EXT=".$OUTPUT_FORMAT"
+OUTPUT_FLAG="--$OUTPUT_FORMAT"
+OUTPUT_FILE="${PUML_FILE%.puml}${OUTPUT_EXT}"
+```
+
 ## Install qpr Workspace-Locally
 
 Use a workspace-local install by default. It avoids global writes and works well in agent sessions.
@@ -85,28 +115,34 @@ docker image inspect plantuml/plantuml-server:jetty >/dev/null 2>&1 || docker pu
 
 ## One-Off Chat Preview
 
-Render PNG beside the controlled `.puml` source:
+Render the active image format beside the controlled `.puml` source. SVG is the default unless setup changed it:
 
 ```bash
-"$QPR" --png --quiet "$PUML_FILE"
+"$QPR" "$OUTPUT_FLAG" --quiet "$PUML_FILE"
 ```
 
 Verify:
 
 ```bash
-PNG_FILE="${PUML_FILE%.puml}.png"
-test -s "$PNG_FILE" && echo "RENDER_OK $PNG_FILE" || echo "RENDER_MISSING"
+OUTPUT_FILE="${PUML_FILE%.puml}${OUTPUT_EXT}"
+test -s "$OUTPUT_FILE" && echo "RENDER_OK $OUTPUT_FILE" || echo "RENDER_MISSING"
 ```
 
 In Codex desktop or another local chat UI that supports local images, embed the absolute image path:
 
 ```markdown
-![PlantUML preview](/absolute/path/to/diagram.png)
+![PlantUML preview](/absolute/path/to/diagram.svg)
 ```
 
-## SVG and Text Outputs
+## PNG and Text Outputs
 
-Use SVG when the user wants a scalable asset:
+Use PNG when the user wants a raster asset or after `plantuml-skill setup .png`:
+
+```bash
+"$QPR" --png --quiet "$PUML_FILE"
+```
+
+Use SVG explicitly when setup currently points to PNG:
 
 ```bash
 "$QPR" --svg --quiet "$PUML_FILE"
@@ -127,7 +163,7 @@ qpr does not need HTML to render PlantUML. If the user asks for an HTML preview 
 HTML_FILE="$DIAGRAM_DIR/index.html"
 ```
 
-The HTML file should reference only artifacts in `DIAGRAM_DIR`, for example `./diagram-preview.png`. Do not write preview HTML into `/tmp`, the home directory, or another ad hoc location.
+The HTML file should reference only artifacts in `DIAGRAM_DIR`, for example `./diagram-preview.svg` by default. Do not write preview HTML into `/tmp`, the home directory, or another ad hoc location.
 
 ## qpr Terminal Preview
 
@@ -154,9 +190,9 @@ For multiple diagrams:
 qpr's built-in `--watch` uses `inotifywait`, which is commonly missing on macOS. If `fswatch` is available, keep qpr as the renderer and let `fswatch` trigger re-renders:
 
 ```bash
-"$QPR" --png --quiet "$PUML_FILE"
+"$QPR" "$OUTPUT_FLAG" --quiet "$PUML_FILE"
 while fswatch -1 "$PUML_FILE"; do
-  "$QPR" --png --quiet "$PUML_FILE"
+  "$QPR" "$OUTPUT_FLAG" --quiet "$PUML_FILE"
 done
 ```
 
@@ -174,7 +210,7 @@ done
 Use server mode for repeated renders:
 
 ```bash
-"$QPR" --server --png --quiet "$PUML_FILE"
+"$QPR" --server "$OUTPUT_FLAG" --quiet "$PUML_FILE"
 ```
 
 qpr targets `localhost:8080` for server mode. If another service is using that port, avoid `--server` and use the default Docker image render path.
