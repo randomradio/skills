@@ -4,12 +4,13 @@ Render PlantUML diagrams with qpr and show previews inside Claude/Codex-style se
 
 ## What It Does
 
-- Detects qpr, Docker, Kitty, watch tools, and PlantUML fallback options.
+- Detects qpr, Apple `container` on macOS, Docker fallback, Kitty, watch tools, and PlantUML fallback options.
 - Prefers qpr from https://github.com/hwblx/qpr for PNG/SVG/TXT rendering.
 - Defaults to SVG image output, with `plantuml-skill setup .png` and `plantuml-skill setup .svg` for persistent format changes.
 - Shows rendered SVG/PNG files as Markdown image previews when the session supports local images.
 - Keeps `.puml`, PNG/SVG/TXT, and optional HTML preview files under the current project or `$PLANTUML_QPR_RENDER_DIR`.
-- Falls back to the local PlantUML CLI only when qpr is unavailable.
+- Uses Apple `container` instead of Docker on macOS when it is installed and ready, via a workspace-local qpr Docker shim.
+- Falls back to the local PlantUML CLI only when qpr is unavailable or no qpr-capable container runtime is available.
 - Uses qpr terminal watch mode when Kitty plus `inotifywait` are available.
 - Uses an `fswatch` loop on macOS when qpr rendering is available but qpr watch mode is not.
 

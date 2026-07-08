@@ -18,22 +18,46 @@ Fix:
 
 Do not write to `/usr/local/bin`, `~/.local/bin`, or another global path unless the user explicitly asks.
 
-## Docker Unavailable
+## Container Runtime Unavailable
 
 Symptoms:
 
 ```text
 DOCKER_UNAVAILABLE
+CONTAINER_UNAVAILABLE
+CONTAINER_NEEDS_SYSTEM_START
 Cannot connect to the Docker daemon
 ```
 
 Fix:
 
-1. Check whether Docker Desktop or the Docker daemon is running.
-2. If Docker cannot be started in this environment, try `plantuml "-t$OUTPUT_FORMAT"` only if the local PlantUML CLI exists.
-3. If no renderer is available, save the `.puml` source and give qpr setup steps instead of pretending the render succeeded.
+1. On macOS, prefer Apple `container`: check `container system status`; if it is installed but stopped, run `container system start` only when it can complete without prompts.
+2. Outside macOS, or when Apple `container` is unavailable, check whether Docker Desktop or the Docker daemon is running.
+3. If no qpr-capable container runtime can be started in this environment, try `plantuml "-t$OUTPUT_FORMAT"` only if the local PlantUML CLI exists.
+4. If no renderer is available, save the `.puml` source and give qpr setup steps instead of pretending the render succeeded.
 
-## qpr Prompts for Docker Image Pull
+## qpr Still Calls Docker on macOS
+
+Symptom:
+
+```text
+CONTAINER_READY
+DOCKER_UNAVAILABLE
+Error: docker: command not found
+```
+
+Cause:
+
+qpr invokes an executable named `docker` internally. Apple `container` is the preferred macOS runtime, but qpr still needs a `docker` command in `PATH`.
+
+Fix:
+
+1. Create the workspace-local qpr Docker shim from `qpr-commands.md`.
+2. Prepend the shim directory to `PATH` in the same shell that invokes qpr.
+3. Verify `docker info` reaches `container system status`, then re-run qpr.
+4. Do not install a global `docker` shim.
+
+## qpr Prompts for Image Pull
 
 Symptom:
 
@@ -47,13 +71,19 @@ Fix:
 Pre-pull before running qpr:
 
 ```bash
-docker pull plantuml/plantuml:latest
+case "$CONTAINER_RUNTIME" in
+  container) container image pull plantuml/plantuml:latest ;;
+  docker) docker pull plantuml/plantuml:latest ;;
+esac
 ```
 
 For server mode:
 
 ```bash
-docker pull plantuml/plantuml-server:jetty
+case "$CONTAINER_RUNTIME" in
+  container) container image pull plantuml/plantuml-server:jetty ;;
+  docker) docker pull plantuml/plantuml-server:jetty ;;
+esac
 ```
 
 ## Watch Mode Fails on macOS
@@ -110,7 +140,7 @@ Check these in order:
 2. The source file is under the current project or `$PLANTUML_QPR_RENDER_DIR`.
 3. qpr rendered the same basename beside the source file.
 4. The source file is inside a writable directory.
-5. Docker can mount the source directory.
+5. The selected container runtime can mount the source directory.
 6. The output format matches the expected extension: `.png`, `.svg`, or `.atxt`.
 
 Verification command:
@@ -175,7 +205,7 @@ localhost:8080 unavailable or wrong service responds
 
 Fix:
 
-qpr server mode assumes `localhost:8080`. If that port is occupied, skip `--server` and use default qpr Docker rendering:
+qpr server mode assumes `localhost:8080`. If that port is occupied, skip `--server` and use default qpr runtime rendering:
 
 ```bash
 "$QPR" "$OUTPUT_FLAG" --quiet "$PUML_FILE"

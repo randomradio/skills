@@ -19,7 +19,7 @@ metadata:
 
 # PlantUML qpr Render
 
-Use this skill to turn PlantUML source into a rendered image during Claude/Codex-style sessions. Prefer `qpr` from https://github.com/hwblx/qpr for rendering, default to SVG images, then display the generated image in the richest preview surface available. Keep rendering qpr-centered and local.
+Use this skill to turn PlantUML source into a rendered image during Claude/Codex-style sessions. Prefer `qpr` from https://github.com/hwblx/qpr for rendering, default to SVG images, then display the generated image in the richest preview surface available. Keep rendering qpr-centered and local. On macOS, prefer Apple's `container` runtime over Docker when it is installed and ready.
 
 ## Step 1: Detect Runtime and Preview Capabilities
 
@@ -30,11 +30,23 @@ Run these checks before choosing a render path:
 ```
 
 ```bash
+OS_NAME=$(uname -s 2>/dev/null || echo "UNAME_UNAVAILABLE"); printf 'OS_NAME=%s\n' "$OS_NAME"
+```
+
+```bash
+if [ "$(uname -s 2>/dev/null)" = "Darwin" ] && command -v container >/dev/null 2>&1; then container system status >/dev/null 2>&1 && echo "CONTAINER_READY" || echo "CONTAINER_NEEDS_SYSTEM_START"; else echo "CONTAINER_UNAVAILABLE"; fi
+```
+
+```bash
+if [ "$(uname -s 2>/dev/null)" = "Darwin" ] && command -v container >/dev/null 2>&1; then container image inspect plantuml/plantuml:latest >/dev/null 2>&1 && echo "PLANTUML_CONTAINER_IMAGE_READY" || echo "PLANTUML_CONTAINER_IMAGE_MISSING"; else echo "PLANTUML_CONTAINER_IMAGE_SKIPPED"; fi
+```
+
+```bash
 (command -v docker >/dev/null && docker info >/dev/null 2>&1 && echo "DOCKER_READY") 2>/dev/null || echo "DOCKER_UNAVAILABLE"
 ```
 
 ```bash
-(docker image inspect plantuml/plantuml:latest >/dev/null 2>&1 && echo "PLANTUML_IMAGE_READY") 2>/dev/null || echo "PLANTUML_IMAGE_MISSING"
+if command -v docker >/dev/null 2>&1; then docker image inspect plantuml/plantuml:latest >/dev/null 2>&1 && echo "PLANTUML_IMAGE_READY" || echo "PLANTUML_IMAGE_MISSING"; else echo "PLANTUML_IMAGE_CHECK_SKIPPED"; fi
 ```
 
 ```bash
@@ -71,10 +83,6 @@ if [ -f "$PLANTUML_QPR_CONFIG" ]; then sed -n 's/^output_format=/CONFIG_OUTPUT_F
 ```
 
 ```bash
-uname -s 2>/dev/null || echo "UNAME_UNAVAILABLE"
-```
-
-```bash
 PROJECT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd); printf 'PROJECT_ROOT=%s\n' "$PROJECT_ROOT"
 ```
 
@@ -85,13 +93,14 @@ if [ -n "$PLANTUML_QPR_RENDER_DIR" ]; then mkdir -p "$PLANTUML_QPR_RENDER_DIR" 2
 **Decision tree:**
 1. First choose a controlled artifact root. If `GLOBAL_RENDER_DIR=/path` is writable, use that global directory. Otherwise use a project-local directory from Step 2.
 2. If the user asks `plantuml-skill setup .svg` or `plantuml-skill setup .png` with or without a leading slash, update the persistent output-format config in Step 2 and stop unless the user also supplied a diagram to render.
-3. If `qpr` and `DOCKER_READY` are available, use qpr as the renderer.
-4. If the session can show local images in chat, use **Method A: qpr chat preview**. This is the default for Codex desktop and similar local agent apps.
-5. If `KITTEN_READY` and `INOTIFY_READY` are also available, use **Method B: qpr terminal live preview** when the user asks for a continuously updating terminal preview.
-6. If `INOTIFY_READY` is missing but `FSWATCH_READY` exists, use **Method C: qpr plus fswatch** as a macOS-friendly watch loop.
-7. If `qpr` is missing but `curl` or `git` is available and Docker is ready, install qpr workspace-locally, then return to Method A.
-8. If Docker is unavailable but `plantuml` CLI exists, use **Method D: PlantUML CLI fallback** and tell the user qpr was not available in this runtime.
-9. If no renderer is available, create or update the `.puml` source in the controlled artifact root and provide exact setup steps from `references/qpr-commands.md`.
+3. On macOS, if `CONTAINER_READY` is available, use Apple `container` as the container runtime. Prepare the qpr Docker shim from `references/qpr-commands.md` before invoking qpr, because qpr calls an executable named `docker` internally.
+4. If `qpr` and either `CONTAINER_READY`, or `DOCKER_READY` in an environment where Apple `container` is not installed, are available, use qpr as the renderer.
+5. If the session can show local images in chat, use **Method A: qpr chat preview**. This is the default for Codex desktop and similar local agent apps.
+6. If `KITTEN_READY` and `INOTIFY_READY` are also available, use **Method B: qpr terminal live preview** when the user asks for a continuously updating terminal preview.
+7. If `INOTIFY_READY` is missing but `FSWATCH_READY` exists, use **Method C: qpr plus fswatch** as a macOS-friendly watch loop.
+8. If `qpr` is missing but `curl` or `git` is available and a container runtime is ready, install qpr workspace-locally, then return to Method A.
+9. If no qpr-capable container runtime is available but `plantuml` CLI exists, use **Method D: PlantUML CLI fallback** and tell the user qpr was not available in this runtime.
+10. If no renderer is available, create or update the `.puml` source in the controlled artifact root and provide exact setup steps from `references/qpr-commands.md`.
 
 ## Step 2: Normalize Inputs and Defaults
 
@@ -152,8 +161,9 @@ Set `QPR=$(command -v qpr 2>/dev/null)` when `qpr` is on `PATH`. If not, install
 1. Prefer `curl` from the pinned qpr commit in `references/qpr-commands.md` into `.tools/bin/qpr`, then verify its SHA256.
 2. If `curl` is unavailable, use `git clone --depth 1 https://github.com/hwblx/qpr.git .tools/qpr` and run `.tools/qpr/qpr`.
 3. Do not install globally or write into the user's home directory unless they explicitly ask.
-4. If Docker is ready but the PlantUML image is missing, run `docker pull plantuml/plantuml:latest` before invoking qpr so qpr does not pause for an interactive prompt.
-5. If using `--server`, also pre-pull `plantuml/plantuml-server:jetty` so qpr does not pause for an interactive prompt.
+4. On macOS, if Apple `container` is ready, read `references/qpr-commands.md` and prepend the workspace-local qpr Docker shim to `PATH` before invoking qpr.
+5. If the PlantUML image is missing, pre-pull it with the selected runtime before invoking qpr so qpr does not pause for an interactive prompt: `container image pull plantuml/plantuml:latest` for Apple `container`, otherwise `docker pull plantuml/plantuml:latest`.
+6. If using `--server`, also pre-pull `plantuml/plantuml-server:jetty` with the selected runtime so qpr does not pause for an interactive prompt.
 
 Install workspace-local qpr under the current project, not under the controlled artifact root, unless those are the same directory. Use `"$QPR"` for all qpr invocations after detection or installation so separate shell sessions do not lose the workspace-local path. Read `references/qpr-commands.md` for copy-paste setup and render commands.
 
@@ -184,7 +194,7 @@ For live editing, re-run qpr after every PlantUML change and send an updated pre
 
 ### Method B: qpr Terminal Live Preview
 
-Use only when `kitten`, `inotifywait`, qpr, and Docker are ready:
+Use only when `kitten`, `inotifywait`, qpr, and a qpr-capable container runtime are ready:
 
 ```bash
 "$QPR" --server --grid=1x1 --watch "$PUML_FILE"
@@ -222,7 +232,7 @@ After rendering:
 2. Confirm SVG output starts with `<svg` or `<?xml`, or PNG output is reported as `PNG image data` by `file`.
 3. Confirm every generated artifact (`.puml`, `.png`, `.svg`, `.atxt`, `.html`) is under the current project or `$PLANTUML_QPR_RENDER_DIR`.
 4. If any artifact lands outside the controlled artifact root, move the source into the controlled root, delete only the out-of-bounds artifact created by this run, and re-render.
-5. If the image is missing, read qpr stderr/stdout or PlantUML CLI output and fix the source, path, Docker, or include issue.
+5. If the image is missing, read qpr stderr/stdout or PlantUML CLI output and fix the source, path, container runtime, or include issue.
 6. If PlantUML renders an error image, inspect the source around the reported line and retry.
 7. If external includes fail, prefer PlantUML's standard library syntax or local includes over brittle network dependencies.
 8. For C4 diagrams, preserve `!include <C4/...>` directives unless the runtime proves they are unavailable.
@@ -243,5 +253,5 @@ Keep the response short. The image is the main artifact.
 
 ## Reference Files
 
-- `references/qpr-commands.md` -- qpr install, render, server, watch, and preview command recipes
-- `references/troubleshooting.md` -- Docker, watch mode, Kitty, include, and output-path fixes
+- `references/qpr-commands.md` -- qpr install, container runtime, render, server, watch, and preview command recipes
+- `references/troubleshooting.md` -- container runtime, watch mode, Kitty, include, and output-path fixes

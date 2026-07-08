@@ -99,18 +99,108 @@ git -C "$PROJECT_ROOT/.tools/qpr" checkout --detach FETCH_HEAD
 ln -sf "$PROJECT_ROOT/.tools/qpr/qpr" "$QPR"
 ```
 
-## Prepare Docker Images
+## Choose Container Runtime
 
-qpr uses Docker and may prompt before pulling images. Pre-pull images in agent sessions so render commands do not block.
+qpr invokes a `docker` executable internally. On macOS, prefer Apple's `container` runtime when it is installed and ready; if Apple `container` is installed but stopped, report that setup state instead of silently falling back. Use Docker when Apple `container` is unavailable and Docker is available.
+
+Apple documents `container` as a macOS container runtime for Apple silicon, with service startup via `container system start` and image/runtime commands such as `container image pull`, `container image inspect`, `container run`, and `container system status`: https://apple.github.io/container/documentation/
 
 ```bash
-docker image inspect plantuml/plantuml:latest >/dev/null 2>&1 || docker pull plantuml/plantuml:latest
+OS_NAME=$(uname -s 2>/dev/null || echo "")
+if [ "$OS_NAME" = "Darwin" ] && command -v container >/dev/null 2>&1; then
+  if container system status >/dev/null 2>&1; then
+    CONTAINER_RUNTIME="container"
+  else
+    CONTAINER_RUNTIME="container-needs-start"
+  fi
+elif command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
+  CONTAINER_RUNTIME="docker"
+else
+  CONTAINER_RUNTIME="none"
+fi
+printf 'CONTAINER_RUNTIME=%s\n' "$CONTAINER_RUNTIME"
+```
+
+If macOS reports `container-needs-start`, run `container system start` only when it can complete non-interactively in the current session. If it prompts for credentials, kernel installation, or another host-level change, stop and ask the user to start it.
+
+## qpr Docker Shim for Apple Container
+
+Use this only when `CONTAINER_RUNTIME=container`. The shim translates the small Docker CLI subset that qpr uses into Apple `container` commands.
+
+```bash
+PROJECT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+DOCKER_SHIM_DIR="$PROJECT_ROOT/.tools/container-shims"
+DOCKER_SHIM="$DOCKER_SHIM_DIR/docker"
+mkdir -p "$DOCKER_SHIM_DIR"
+cat > "$DOCKER_SHIM" <<'SH'
+#!/bin/sh
+set -eu
+
+case "${1:-}" in
+  info)
+    shift
+    exec container system status "$@"
+    ;;
+  image)
+    shift
+    case "${1:-}" in
+      inspect)
+        shift
+        exec container image inspect "$@"
+        ;;
+      *)
+        echo "container docker shim: unsupported docker image subcommand: ${1:-}" >&2
+        exit 64
+        ;;
+    esac
+    ;;
+  pull)
+    shift
+    exec container image pull "$@"
+    ;;
+  run)
+    shift
+    exec container run "$@"
+    ;;
+  *)
+    echo "container docker shim: unsupported docker command: ${1:-}" >&2
+    exit 64
+    ;;
+esac
+SH
+chmod +x "$DOCKER_SHIM"
+export PATH="$DOCKER_SHIM_DIR:$PATH"
+docker info >/dev/null
+```
+
+Keep the shim under `.tools/container-shims` in the current project. Do not install a global `docker` shim.
+
+## Prepare Runtime Images
+
+Pre-pull images in agent sessions so qpr render commands do not block.
+
+```bash
+case "$CONTAINER_RUNTIME" in
+  container)
+    container image inspect plantuml/plantuml:latest >/dev/null 2>&1 || container image pull plantuml/plantuml:latest
+    ;;
+  docker)
+    docker image inspect plantuml/plantuml:latest >/dev/null 2>&1 || docker pull plantuml/plantuml:latest
+    ;;
+esac
 ```
 
 For repeated renders or watch sessions, qpr can use a local PlantUML server:
 
 ```bash
-docker image inspect plantuml/plantuml-server:jetty >/dev/null 2>&1 || docker pull plantuml/plantuml-server:jetty
+case "$CONTAINER_RUNTIME" in
+  container)
+    container image inspect plantuml/plantuml-server:jetty >/dev/null 2>&1 || container image pull plantuml/plantuml-server:jetty
+    ;;
+  docker)
+    docker image inspect plantuml/plantuml-server:jetty >/dev/null 2>&1 || docker pull plantuml/plantuml-server:jetty
+    ;;
+esac
 ```
 
 ## One-Off Chat Preview
@@ -213,7 +303,7 @@ Use server mode for repeated renders:
 "$QPR" --server "$OUTPUT_FLAG" --quiet "$PUML_FILE"
 ```
 
-qpr targets `localhost:8080` for server mode. If another service is using that port, avoid `--server` and use the default Docker image render path.
+qpr targets `localhost:8080` for server mode. If another service is using that port, avoid `--server` and use the default runtime image render path.
 
 ## Output Rules
 
