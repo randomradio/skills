@@ -7,7 +7,7 @@
     "name": "randomradio",
     "version": "1.8.0",
     "description": "Goal-driven development tools with structured planning, review, and autonomous execution.",
-    "skillCount": 20,
+    "skillCount": 21,
     "agentCount": 27,
     "upstreamTrackedCount": 13
   },
@@ -205,6 +205,27 @@
         "upstreamSkill": "ce-ideate",
         "updatePolicy": "prefer-upstream-with-local-contracts",
         "syncStrategy": "adopt-ideation-rigor-with-randomradio-pipeline"
+      }
+    },
+    {
+      "id": "make-human-work",
+      "name": "rr:make-human-work",
+      "title": "Make Human Work",
+      "category": "Productivity",
+      "description": "Make Human Work by creating Notion tasks for human intervention during long-running Codex, CloudPy, Claude, or agent execution. Use when an agent needs the user to grant access, answer a blocking question, make a product/design decision, perform an external action, approve a risky step, complete a manual checklist item, \"send this to me as a task\", or \"make human work\". Also trigger for async human handoff, human-in-the-loop blockers, return-to-agent links, Notion task list setup, and resuming an agent after the user completes a task.",
+      "version": "1.8.0",
+      "versionScope": "collection",
+      "tags": [],
+      "featured": false,
+      "path": "plugins/randomradio/skills/make-human-work/SKILL.md",
+      "sourceUrl": "https://github.com/randomradio/skills/blob/master/plugins/randomradio/skills/make-human-work/SKILL.md",
+      "upstream": {
+        "mode": "original",
+        "provider": null,
+        "providerName": null,
+        "upstreamSkill": null,
+        "updatePolicy": null,
+        "syncStrategy": null
       }
     },
     {

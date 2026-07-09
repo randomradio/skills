@@ -21,6 +21,7 @@ claude plugin add ./plugins/randomradio
 | `rr:tdd` | Test-driven development discipline |
 | `rr:plantuml-qpr-render` | Render PlantUML via qpr with controlled project/global preview artifacts |
 | `rr:skills-market-publish` | Publish skills and the public skills market through CI, GitHub Pages, and Cloudflare DNS |
+| `rr:make-human-work` | Route long-running agent blockers and human intervention requests into a Notion task database |
 | `rr:quick-shoutout` | Publish apps to latentvibe.com via Cloudflare |
 | `rr:compound` | Capture solved problems as schema-backed `docs/solutions/` learnings |
 | `rr:compound-refresh` | Refresh stale or overlapping solution docs |

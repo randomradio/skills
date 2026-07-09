@@ -30,6 +30,7 @@ const categoryById = new Map([
   ["git-commit", "Git"],
   ["git-commit-push-pr", "Git"],
   ["git-worktree", "Git"],
+  ["make-human-work", "Productivity"],
   ["ideate", "Workflow"],
   ["plan", "Workflow"],
   ["plantuml-qpr-render", "Diagrams"],
