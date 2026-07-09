@@ -78,7 +78,10 @@ instead of relying on the local file. If the older `HUMAN_TASKS_*` variables
 already exist, treat them as a compatibility fallback.
 
 **Setup gate:** Create one dry-run task titled
-`Test human handoff from agent`. If Notion write fails, do not pretend setup is
+`Test human handoff from agent`. The dry-run body must be useful enough for a
+human to complete without reading the agent thread: include exact action steps,
+acceptance criteria, repo/runtime context, the configured field mapping, and a
+copy-paste resume prompt. If Notion write fails, do not pretend setup is
 complete; record the exact failing path and fall back to a local payload.
 
 ## Step 3: Decide Whether a Human Task Is Warranted
@@ -110,11 +113,18 @@ Minimum payload:
 
 1. **Title**: Imperative and specific, under 90 characters.
 2. **Requested action**: The exact thing the human must do.
-3. **Why now**: What is blocked or risky.
-4. **Acceptance criteria**: How the agent will know the task is done.
-5. **Context**: Repo, cwd, branch, command, error, links, and relevant files.
-6. **Options**: Concrete choices when asking for a decision.
-7. **Return to agent**: Thread URL/ID if available, plus a resume prompt.
+3. **Steps to complete**: Ordered, concrete steps the human can follow without
+   the agent thread.
+4. **Why now**: What is blocked or risky.
+5. **Acceptance criteria**: How the agent will know the task is done.
+6. **Context**: Repo, cwd, branch, command, error, links, and relevant files.
+7. **Options**: Concrete choices when asking for a decision.
+8. **Return to agent**: Thread URL/ID if available, plus a resume prompt.
+
+If any of the steps depend on a UI, external account, or approval flow, include
+the exact destination, what to click or verify, and the success signal the human
+should report back. Avoid vague tasks such as "check this" or "decide"; rewrite
+them into observable actions.
 
 Use `references/task-payload.md` for the full schema and body template.
 

@@ -41,6 +41,13 @@ Use properties only when the database supports them:
 
 [One exact thing the human should do.]
 
+## Steps To Complete
+
+1. [Open or visit the exact place.]
+2. [Perform the concrete action.]
+3. [Verify the visible success signal.]
+4. [Return the requested result to the agent.]
+
 ## Why This Is Needed
 
 [What is blocked, risky, or outside the agent environment.]
@@ -57,6 +64,7 @@ Use properties only when the database supports them:
 - Worktree: [path if different]
 - Related files/commands/URLs: [list]
 - Error or decision point: [short excerpt]
+- Field mapping, if creating a Notion task: [properties used and fields stored in body]
 
 ## Options
 
@@ -79,6 +87,15 @@ Please resume from: [repo/cwd, branch, blocked step].
 ````
 
 Omit `Options` when the task is not a decision.
+
+## Detail Rules
+
+The body should let a human finish the task from Notion alone. Include concrete
+UI destinations, account names, files, commands, screenshots or URLs when they
+matter, and the exact value or confirmation the human should paste back. When a
+task asks for approval or a decision, state the default recommendation and the
+tradeoff. When a task asks for an external action, provide step-by-step
+instructions and the visible success signal.
 
 ## Title Rules
 

@@ -81,6 +81,11 @@ Suggested select values:
 7. Create a dry-run task titled `Test human handoff from agent`.
 8. Mark the dry-run task `Done` if status updates are supported.
 
+The dry-run task is a quality gate, not a placeholder. It must include a short
+but complete action path for the human, the database URL/data source being
+tested, the field mapping that was actually used, acceptance criteria, and the
+resume prompt the human should paste back into the agent thread.
+
 ## Field Mapping Rules
 
 Use the configured field name only if that property exists in the fetched
@@ -90,6 +95,12 @@ the page body.
 Never invent Notion property types. If the fetched schema says `Priority` is
 text, write text. If it says select, write a select value. If unsure, omit the
 property and use the body.
+
+For an existing personal `My Tasks` database, expect the title/date fields to
+vary by template (`Name`, `Task name`, `Due`, or `Due Date` are all common).
+Fetch the schema every setup run and update `~/.codex/make-human-work.env` to
+the observed names. If the schema cannot be fetched, keep the stored mapping but
+write the proposed mapping into the task body so the human can correct it.
 
 ## Setup Success Criteria
 
