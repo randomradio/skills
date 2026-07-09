@@ -182,7 +182,8 @@ function validateManifest(manifest, ids) {
 }
 
 function compareSkill(manifest, id) {
-  const entry = manifest.skills[id];
+  // Missing entries are reported by validateManifest; don't crash before that.
+  const entry = manifest.skills[id] ?? { mode: "original" };
   const localPath = path.join(skillsRoot, id, "SKILL.md");
   const localSource = fs.readFileSync(localPath, "utf8");
   const localMeta = parseFrontmatter(localSource);

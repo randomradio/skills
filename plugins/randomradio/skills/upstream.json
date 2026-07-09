@@ -34,6 +34,9 @@
         ]
       }
     },
+    "codex-first": {
+      "mode": "original"
+    },
     "compound": {
       "mode": "fork",
       "provider": "compound-engineering",
@@ -192,6 +195,9 @@
           "rr:brainstorm"
         ]
       }
+    },
+    "make-human-work": {
+      "mode": "original"
     },
     "plan": {
       "mode": "fork",
