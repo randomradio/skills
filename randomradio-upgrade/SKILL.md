@@ -1,6 +1,6 @@
 ---
 name: randomradio-upgrade
-description: Upgrade the randomradio plugin across platforms. Supports Claude Code (native plugin system) and Codex (flat skills directory). Auto-detects installed platforms by default.
+description: Upgrade the randomradio plugin across platforms, or safely remove all Codex personal skills while keeping built-in system skills. Use for RandomRadio updates and full personal-skill cleanup.
 ---
 
 # RandomRadio Upgrade
@@ -56,6 +56,24 @@ Verbose output:
 ```bash
 ./randomradio-upgrade/scripts/upgrade_skills.sh --verbose
 ```
+
+## Uninstall All Personal Skills
+
+Preview the personal skills that the script will remove:
+
+```bash
+./randomradio-upgrade/scripts/uninstall_personal_skills.sh --dry-run
+```
+
+Remove all personal skills without an interactive prompt:
+
+```bash
+./randomradio-upgrade/scripts/uninstall_personal_skills.sh --yes
+```
+
+Use `--codex-dir <path>` to select an explicit Codex skills directory. The
+script removes top-level entries that contain `SKILL.md`. It keeps `.system`
+and entries that are not skills.
 
 ## How It Works
 
